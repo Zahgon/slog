@@ -2,7 +2,6 @@ package slog
 
 import (
 	"github.com/gookit/color"
-	"github.com/gookit/goutil/arrutil"
 	"github.com/valyala/bytebufferpool"
 )
 
@@ -62,83 +61,58 @@ type TextFormatter struct {
 type TextFormatterFn func(*TextFormatter)
 
 // NewTextFormatter create new TextFormatter
-func NewTextFormatter(template ...string) *TextFormatter {
-	var fmtTpl string
-	if len(template) > 0 {
-		fmtTpl = template[0]
-	} else {
-		fmtTpl = DefaultTemplate
-	}
+func NewTextFormatter(template ...string) *TextFormatter { _ = "STUB: not implemented"; return nil }
 
-	f := &TextFormatter{
-		// default options
-		ColorTheme: ColorTheme,
-		TimeFormat: DefaultTimeFormat,
-		// EnableColor: color.SupportColor(),
-		// EncodeFunc: func(v any) string {
-		// 	return fmt.Sprint(v)
-		// },
-		EncodeFunc: EncodeToString,
-	}
-	f.SetTemplate(fmtTpl)
+// default options
 
-	return f
-}
+// EnableColor: color.SupportColor(),
+// EncodeFunc: func(v any) string {
+// 	return fmt.Sprint(v)
+// },
 
 // TextFormatterWith create new TextFormatter with options
 func TextFormatterWith(fns ...TextFormatterFn) *TextFormatter {
-	return NewTextFormatter().WithOptions(fns...)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // LimitLevelNameLen limit the length of the level name
 func LimitLevelNameLen(length int) TextFormatterFn {
-	return func(f *TextFormatter) {
-		f.LevelFormatFunc = func(s string) string {
-			return FormatLevelName(s, length)
-		}
-	}
+	_ = "STUB: not implemented"
+	return *new(TextFormatterFn)
 }
 
 // Configure the formatter
 func (f *TextFormatter) Configure(fn TextFormatterFn) *TextFormatter {
-	return f.WithOptions(fn)
+	_ = "STUB: not implemented"
+	return nil
+
+	// WithOptions func on the formatter
 }
 
-// WithOptions func on the formatter
 func (f *TextFormatter) WithOptions(fns ...TextFormatterFn) *TextFormatter {
-	for _, fn := range fns {
-		fn(f)
-	}
-	return f
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // SetTemplate set the log format template and update field-map
-func (f *TextFormatter) SetTemplate(fmtTpl string) {
-	f.template = fmtTpl
-	f.fields = parseTemplateToFields(fmtTpl)
-}
+func (f *TextFormatter) SetTemplate(fmtTpl string) { _ = "STUB: not implemented"; return }
 
 // Template get
 func (f *TextFormatter) Template() string {
-	return f.template
+	_ = "STUB: not implemented"
+
+	// WithEnableColor enable color on print log to terminal
+	return ""
 }
 
-// WithEnableColor enable color on print log to terminal
 func (f *TextFormatter) WithEnableColor(enable bool) *TextFormatter {
-	f.EnableColor = enable
-	return f
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Fields get an export field list
-func (f *TextFormatter) Fields() []string {
-	ss := make([]string, 0, len(f.fields)/2)
-	for _, s := range f.fields {
-		if s[0] >= 'a' && s[0] <= 'z' {
-			ss = append(ss, s)
-		}
-	}
-	return ss
-}
+func (f *TextFormatter) Fields() []string { _ = "STUB: not implemented"; return nil }
 
 var textPool bytebufferpool.Pool
 
@@ -146,101 +120,32 @@ var textPool bytebufferpool.Pool
 //
 //goland:noinspection GoUnhandledErrorResult
 func (f *TextFormatter) Format(r *Record) ([]byte, error) {
-	f.beforeFormat()
-	buf := textPool.Get()
-	defer textPool.Put(buf)
-
-	// record formatted custom fields
-	var formattedFields []string
-
-	for _, field := range f.fields {
-		// is not field name. eg: "}}] "
-		if field[0] < 'a' || field[0] > 'z' {
-			// remove left "}}"
-			if len(field) > 1 && field[0:2] == "}}" {
-				buf.WriteString(field[2:])
-			} else {
-				buf.WriteString(field)
-			}
-			continue
-		}
-
-		switch {
-		case field == FieldKeyDatetime:
-			buf.B = r.Time.AppendFormat(buf.B, f.TimeFormat)
-		case field == FieldKeyTimestamp:
-			buf.WriteString(r.timestamp())
-		case field == FieldKeyCaller && r.Caller != nil:
-			buf.WriteString(formatCaller(r.Caller, r.CallerFlag, f.CallerFormatFunc))
-		case field == FieldKeyLevel:
-			buf.WriteString(f.renderColorText(field, r.LevelName(), r.Level))
-		case field == FieldKeyChannel:
-			buf.WriteString(r.Channel)
-		case field == FieldKeyMessage:
-			buf.WriteString(f.renderColorText(field, r.Message, r.Level))
-		case field == FieldKeyData:
-			if f.FullDisplay || len(r.Data) > 0 {
-				buf.WriteString(f.EncodeFunc(r.Data))
-			}
-		case field == FieldKeyExtra:
-			if f.FullDisplay || len(r.Extra) > 0 {
-				buf.WriteString(f.EncodeFunc(r.Extra))
-			}
-		default:
-			if _, ok := r.Fields[field]; ok {
-				formattedFields = append(formattedFields, field)
-				buf.WriteString(f.EncodeFunc(r.Fields[field]))
-			} else {
-				buf.WriteString(field)
-			}
-		}
-	}
-
-	// UP: check not configured fields in template.
-	if fLen := len(r.Fields); fLen > 0 && fLen != len(formattedFields) {
-		unformattedFields := make(map[string]any)
-		for k, v := range r.Fields {
-			if !arrutil.StringsContains(formattedFields, k) {
-				unformattedFields[k] = v
-			}
-		}
-		buf.WriteString("UN-CONFIGURED FIELDS: ")
-		buf.WriteString(f.EncodeFunc(unformattedFields))
-		buf.WriteByte('\n')
-	}
-
-	// return buf.Bytes(), nil
-	return buf.B, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
+// record formatted custom fields
+
+// is not field name. eg: "}}] "
+
+// remove left "}}"
+
+// UP: check not configured fields in template.
+
+// return buf.Bytes(), nil
+
 func (f *TextFormatter) beforeFormat() {
+	_ = "STUB: not implemented"
 	// if f.BeforeFunc == nil {}
-	if f.EncodeFunc == nil {
-		f.EncodeFunc = EncodeToString
-	}
-	if f.ColorTheme == nil {
-		f.ColorTheme = ColorTheme
-	}
+	return
 }
 
 func (f *TextFormatter) renderColorText(field, s string, l Level) string {
+	_ = "STUB: not implemented"
 	// custom level name format
-	if f.LevelFormatFunc != nil && field == FieldKeyLevel {
-		s = f.LevelFormatFunc(s)
-	}
-
-	if !f.EnableColor {
-		return s
-	}
-
-	// custom color render func
-	if f.ColorRenderFunc != nil {
-		return f.ColorRenderFunc(field, s, l)
-	}
-
-	// output colored logs for console output
-	if theme, ok := f.ColorTheme[l]; ok {
-		return theme.Render(s)
-	}
-	return s
+	return ""
 }
+
+// custom color render func
+
+// output colored logs for console output

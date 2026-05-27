@@ -8,7 +8,6 @@ import (
 	"os"
 	"sync"
 
-	"github.com/gookit/goutil/fsutil"
 	"github.com/gookit/slog"
 )
 
@@ -73,45 +72,39 @@ type NopFlushClose struct{}
 
 // Flush logs to disk
 func (h *NopFlushClose) Flush() error {
+	_ = "STUB: not implemented"
+
+	// Close handler
 	return nil
 }
 
-// Close handler
 func (h *NopFlushClose) Close() error {
+	_ = "STUB: not implemented"
+
+	// LockWrapper struct
 	return nil
 }
 
-// LockWrapper struct
 type LockWrapper struct {
 	sync.Mutex
 	disable bool
 }
 
 // Lock it
-func (lw *LockWrapper) Lock() {
-	if !lw.disable {
-		lw.Mutex.Lock()
-	}
-}
+func (lw *LockWrapper) Lock() { _ = "STUB: not implemented"; return }
 
 // Unlock it
-func (lw *LockWrapper) Unlock() {
-	if !lw.disable {
-		lw.Mutex.Unlock()
-	}
-}
+func (lw *LockWrapper) Unlock() { _ = "STUB: not implemented"; return }
 
 // EnableLock enable lock
-func (lw *LockWrapper) EnableLock(enable bool) {
-	lw.disable = !enable
-}
+func (lw *LockWrapper) EnableLock(enable bool) { _ = "STUB: not implemented"; return }
 
 // LockEnabled status
 func (lw *LockWrapper) LockEnabled() bool {
-	return !lw.disable
+	_ = "STUB: not implemented"
+
+	// QuickOpenFile like os.OpenFile
+	return false
 }
 
-// QuickOpenFile like os.OpenFile
-func QuickOpenFile(filepath string) (*os.File, error) {
-	return fsutil.OpenFile(filepath, DefaultFileFlags, DefaultFilePerm)
-}
+func QuickOpenFile(filepath string) (*os.File, error) { _ = "STUB: not implemented"; return nil, nil }

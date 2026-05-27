@@ -2,12 +2,8 @@ package slog
 
 import (
 	"context"
-	"fmt"
 	"runtime"
-	"strconv"
 	"time"
-
-	"github.com/gookit/goutil/strutil"
 )
 
 // Record a log record definition
@@ -66,34 +62,21 @@ type Record struct {
 	Args []any
 }
 
-func newRecord(logger *Logger) *Record {
-	return &Record{
-		logger:  logger,
-		Channel: strutil.OrElse(logger.ChannelName, DefaultChannelName),
-		// with some options
-		CallerFlag: logger.CallerFlag,
-		CallerSkip: logger.CallerSkip,
-		// init map data field
-		// Data:   make(M, 2),
-		// Extra:  make(M, 0),
-		// Fields: make(M, 0),
-	}
-}
+func newRecord(logger *Logger) *Record { _ = "STUB: not implemented"; return nil }
+
+// with some options
+
+// init map data field
+// Data:   make(M, 2),
+// Extra:  make(M, 0),
+// Fields: make(M, 0),
 
 // Reused set record is reused, will not be released on after writing.
 // so, MUST call Release() method after use completed.
-func (r *Record) Reused() *Record {
-	r.reuse = true
-	return r
-}
+func (r *Record) Reused() *Record { _ = "STUB: not implemented"; return nil }
 
 // Release manual release record to pool
-func (r *Record) Release() {
-	if r.reuse {
-		r.reuse = false
-		r.logger.releaseRecord(r)
-	}
-}
+func (r *Record) Release() { _ = "STUB: not implemented"; return }
 
 //
 // ---------------------------------------------------------------------------
@@ -102,88 +85,36 @@ func (r *Record) Release() {
 //
 
 // WithTime set the record time
-func (r *Record) WithTime(t time.Time) *Record {
-	nr := r.Copy()
-	nr.Time = t
-	return nr
-}
+func (r *Record) WithTime(t time.Time) *Record { _ = "STUB: not implemented"; return nil }
 
 // WithCtx on record
-func (r *Record) WithCtx(ctx context.Context) *Record { return r.WithContext(ctx) }
+func (r *Record) WithCtx(ctx context.Context) *Record { _ = "STUB: not implemented"; return nil }
 
 // WithContext on record
-func (r *Record) WithContext(ctx context.Context) *Record {
-	nr := r.Copy()
-	nr.Ctx = ctx
-	return nr
-}
+func (r *Record) WithContext(ctx context.Context) *Record { _ = "STUB: not implemented"; return nil }
 
 // WithError on record
-func (r *Record) WithError(err error) *Record {
-	return r.WithFields(M{FieldKeyError: err})
-}
+func (r *Record) WithError(err error) *Record { _ = "STUB: not implemented"; return nil }
 
 // WithData on record
-func (r *Record) WithData(data M) *Record {
-	nr := r.Copy()
-	nr.Data = data
-	return nr
-}
+func (r *Record) WithData(data M) *Record { _ = "STUB: not implemented"; return nil }
 
 // WithField with a new field to record
 //
 // Note: add field need config Formatter template fields.
-func (r *Record) WithField(name string, val any) *Record {
-	return r.WithFields(M{name: val})
-}
+func (r *Record) WithField(name string, val any) *Record { _ = "STUB: not implemented"; return nil }
 
 // WithFields with new fields to record
 //
 // Note: add field need config Formatter template fields.
-func (r *Record) WithFields(fields M) *Record {
-	nr := r.Copy()
-	if nr.Fields == nil {
-		nr.Fields = make(M, len(fields))
-	}
-
-	for k, v := range fields {
-		nr.Fields[k] = v
-	}
-	return nr
-}
+func (r *Record) WithFields(fields M) *Record { _ = "STUB: not implemented"; return nil }
 
 // Copy new record from old record
-func (r *Record) Copy() *Record {
-	dataCopy := make(M, len(r.Data))
-	for k, v := range r.Data {
-		dataCopy[k] = v
-	}
+func (r *Record) Copy() *Record { _ = "STUB: not implemented"; return nil }
 
-	fieldsCopy := make(M, len(r.Fields))
-	for k, v := range r.Fields {
-		fieldsCopy[k] = v
-	}
+// reuse: true, // copy record is reused
 
-	extraCopy := make(M, len(r.Extra))
-	for k, v := range r.Extra {
-		extraCopy[k] = v
-	}
-
-	return &Record{
-		// reuse: true, // copy record is reused
-		logger:  r.logger,
-		Channel: r.Channel,
-		// Time:       r.Time,
-		Level:      r.Level,
-		levelName:  r.levelName,
-		CallerFlag: r.CallerFlag,
-		CallerSkip: r.CallerSkip,
-		Message:    r.Message,
-		Data:       dataCopy,
-		Extra:      extraCopy,
-		Fields:     fieldsCopy,
-	}
-}
+// Time:       r.Time,
 
 //
 // ---------------------------------------------------------------------------
@@ -192,125 +123,49 @@ func (r *Record) Copy() *Record {
 //
 
 // SetCtx on record
-func (r *Record) SetCtx(ctx context.Context) *Record { return r.SetContext(ctx) }
+func (r *Record) SetCtx(ctx context.Context) *Record { _ = "STUB: not implemented"; return nil }
 
 // SetContext on record
-func (r *Record) SetContext(ctx context.Context) *Record {
-	r.Ctx = ctx
-	return r
-}
+func (r *Record) SetContext(ctx context.Context) *Record { _ = "STUB: not implemented"; return nil }
 
 // SetData on record
-func (r *Record) SetData(data M) *Record {
-	r.Data = data
-	return r
-}
+func (r *Record) SetData(data M) *Record { _ = "STUB: not implemented"; return nil }
 
 // AddData on record
-func (r *Record) AddData(data M) *Record {
-	if r.Data == nil {
-		r.Data = data
-		return r
-	}
-
-	for k, v := range data {
-		r.Data[k] = v
-	}
-	return r
-}
+func (r *Record) AddData(data M) *Record { _ = "STUB: not implemented"; return nil }
 
 // WithValue add Data value to record. alias of AddValue
-func (r *Record) WithValue(key string, value any) *Record {
-	return r.AddValue(key, value)
-}
+func (r *Record) WithValue(key string, value any) *Record { _ = "STUB: not implemented"; return nil }
 
 // AddValue add Data value to record
-func (r *Record) AddValue(key string, value any) *Record {
-	if r.Data == nil {
-		r.Data = make(M, 8)
-	}
-
-	r.Data[key] = value
-	return r
-}
+func (r *Record) AddValue(key string, value any) *Record { _ = "STUB: not implemented"; return nil }
 
 // Value get Data value from record
-func (r *Record) Value(key string) any {
-	if r.Data == nil {
-		return nil
-	}
-	return r.Data[key]
-}
+func (r *Record) Value(key string) any { _ = "STUB: not implemented"; return *new(any) }
 
 // SetExtra information on record
-func (r *Record) SetExtra(data M) *Record {
-	r.Extra = data
-	return r
-}
+func (r *Record) SetExtra(data M) *Record { _ = "STUB: not implemented"; return nil }
 
 // AddExtra information on record
-func (r *Record) AddExtra(data M) *Record {
-	if r.Extra == nil {
-		r.Extra = data
-		return r
-	}
-
-	for k, v := range data {
-		r.Extra[k] = v
-	}
-	return r
-}
+func (r *Record) AddExtra(data M) *Record { _ = "STUB: not implemented"; return nil }
 
 // SetExtraValue on record
-func (r *Record) SetExtraValue(k string, v any) {
-	if r.Extra == nil {
-		r.Extra = make(M, 8)
-	}
-	r.Extra[k] = v
-}
+func (r *Record) SetExtraValue(k string, v any) { _ = "STUB: not implemented"; return }
 
 // SetTime on record
-func (r *Record) SetTime(t time.Time) *Record {
-	r.Time = t
-	return r
-}
+func (r *Record) SetTime(t time.Time) *Record { _ = "STUB: not implemented"; return nil }
 
 // AddField add new field to the record
-func (r *Record) AddField(name string, val any) *Record {
-	if r.Fields == nil {
-		r.Fields = make(M, 8)
-	}
-
-	r.Fields[name] = val
-	return r
-}
+func (r *Record) AddField(name string, val any) *Record { _ = "STUB: not implemented"; return nil }
 
 // AddFields add new fields to the record
-func (r *Record) AddFields(fields M) *Record {
-	if r.Fields == nil {
-		r.Fields = fields
-		return r
-	}
-
-	for n, v := range fields {
-		r.Fields[n] = v
-	}
-	return r
-}
+func (r *Record) AddFields(fields M) *Record { _ = "STUB: not implemented"; return nil }
 
 // SetFields to the record
-func (r *Record) SetFields(fields M) *Record {
-	r.Fields = fields
-	return r
-}
+func (r *Record) SetFields(fields M) *Record { _ = "STUB: not implemented"; return nil }
 
 // Field value gets from record
-func (r *Record) Field(key string) any {
-	if r.Fields == nil {
-		return nil
-	}
-	return r.Fields[key]
-}
+func (r *Record) Field(key string) any { _ = "STUB: not implemented"; return *new(any) }
 
 //
 // ---------------------------------------------------------------------------
@@ -345,133 +200,101 @@ func (r *Record) Field(key string) any {
 // ---------------------------------------------------------------------------
 //
 
-func (r *Record) log(level Level, args []any) {
-	r.Level = level
-	if r.logger.BackupArgs {
-		r.Args = args
-	}
+func (r *Record) log(level Level, args []any) { _ = "STUB: not implemented"; return }
 
-	// r.Message = strutil.Byte2str(formatArgsWithSpaces(args)) // will reduce memory allocation once
-	r.Message = formatArgsWithSpaces(args)
-	// do write log, then release record
-	r.logger.writeRecord(level, r)
-	r.logger.releaseRecord(r)
-}
+// r.Message = strutil.Byte2str(formatArgsWithSpaces(args)) // will reduce memory allocation once
 
-func (r *Record) logf(level Level, format string, args []any) {
-	if r.logger.BackupArgs {
-		r.Fmt, r.Args = format, args
-	}
+// do write log, then release record
 
-	r.Level = level
-	r.Message = fmt.Sprintf(format, args...)
-	// do write log, then release record
-	r.logger.writeRecord(level, r)
-	r.logger.releaseRecord(r)
-}
+func (r *Record) logf(level Level, format string, args []any) { _ = "STUB: not implemented"; return }
+
+// do write log, then release record
 
 // Log a message with level
-func (r *Record) Log(level Level, args ...any) { r.log(level, args) }
+func (r *Record) Log(level Level, args ...any) {
+	_ = "STUB: not implemented"
 
-// Logf a message with level
-func (r *Record) Logf(level Level, format string, args ...any) {
-	r.logf(level, format, args)
+	// Logf a message with level
+	return
 }
+
+func (r *Record) Logf(level Level, format string, args ...any) { _ = "STUB: not implemented"; return }
 
 // Info logs a message at level Info
-func (r *Record) Info(args ...any) { r.log(InfoLevel, args) }
+func (r *Record) Info(args ...any) { _ = "STUB: not implemented"; return }
 
 // Infof logs a message at level Info
-func (r *Record) Infof(format string, args ...any) {
-	r.logf(InfoLevel, format, args)
-}
+func (r *Record) Infof(format string, args ...any) { _ = "STUB: not implemented"; return }
 
 // Trace logs a message at level Trace
-func (r *Record) Trace(args ...any) { r.log(TraceLevel, args) }
+func (r *Record) Trace(args ...any) { _ = "STUB: not implemented"; return }
 
 // Tracef logs a message at level Trace
-func (r *Record) Tracef(format string, args ...any) {
-	r.logf(TraceLevel, format, args)
-}
+func (r *Record) Tracef(format string, args ...any) { _ = "STUB: not implemented"; return }
 
 // Error logs a message at level Error
-func (r *Record) Error(args ...any) { r.log(ErrorLevel, args) }
+func (r *Record) Error(args ...any) { _ = "STUB: not implemented"; return }
 
 // Errorf logs a message at level Error
-func (r *Record) Errorf(format string, args ...any) {
-	r.logf(ErrorLevel, format, args)
-}
+func (r *Record) Errorf(format string, args ...any) { _ = "STUB: not implemented"; return }
 
 // Warn logs a message at level Warn
-func (r *Record) Warn(args ...any) { r.log(WarnLevel, args) }
+func (r *Record) Warn(args ...any) { _ = "STUB: not implemented"; return }
 
 // Warnf logs a message at level Warn
-func (r *Record) Warnf(format string, args ...any) {
-	r.logf(WarnLevel, format, args)
-}
+func (r *Record) Warnf(format string, args ...any) { _ = "STUB: not implemented"; return }
 
 // Notice logs a message at level Notice
-func (r *Record) Notice(args ...any) { r.log(NoticeLevel, args) }
+func (r *Record) Notice(args ...any) { _ = "STUB: not implemented"; return }
 
 // Noticef logs a message at level Notice
-func (r *Record) Noticef(format string, args ...any) {
-	r.logf(NoticeLevel, format, args)
-}
+func (r *Record) Noticef(format string, args ...any) { _ = "STUB: not implemented"; return }
 
 // Debug logs a message at level Debug
-func (r *Record) Debug(args ...any) { r.log(DebugLevel, args) }
+func (r *Record) Debug(args ...any) { _ = "STUB: not implemented"; return }
 
 // Debugf logs a message at level Debug
-func (r *Record) Debugf(format string, args ...any) {
-	r.logf(DebugLevel, format, args)
-}
+func (r *Record) Debugf(format string, args ...any) { _ = "STUB: not implemented"; return }
 
 // Print logs a message at level Print
-func (r *Record) Print(args ...any) { r.log(PrintLevel, args) }
+func (r *Record) Print(args ...any) { _ = "STUB: not implemented"; return }
 
 // Println logs a message at level Print. alias of Print
-func (r *Record) Println(args ...any) { r.log(PrintLevel, args) }
+func (r *Record) Println(args ...any) { _ = "STUB: not implemented"; return }
 
 // Printf logs a message at level Print
-func (r *Record) Printf(format string, args ...any) {
-	r.logf(PrintLevel, format, args)
-}
+func (r *Record) Printf(format string, args ...any) { _ = "STUB: not implemented"; return }
 
 // Fatal logs a message at level Fatal
-func (r *Record) Fatal(args ...any) { r.log(FatalLevel, args) }
+func (r *Record) Fatal(args ...any) { _ = "STUB: not implemented"; return }
 
 // Fatalln logs a message at level Fatal
-func (r *Record) Fatalln(args ...any) { r.log(FatalLevel, args) }
+func (r *Record) Fatalln(args ...any) { _ = "STUB: not implemented"; return }
 
 // Fatalf logs a message at level Fatal
-func (r *Record) Fatalf(format string, args ...any) {
-	r.logf(FatalLevel, format, args)
-}
+func (r *Record) Fatalf(format string, args ...any) { _ = "STUB: not implemented"; return }
 
 // Panic logs a message at level Panic
-func (r *Record) Panic(args ...any) { r.log(PanicLevel, args) }
+func (r *Record) Panic(args ...any) { _ = "STUB: not implemented"; return }
 
 // Panicln logs a message at level Panic
-func (r *Record) Panicln(args ...any) { r.log(PanicLevel, args) }
+func (r *Record) Panicln(args ...any) { _ = "STUB: not implemented"; return }
 
 // Panicf logs a message at level Panic
-func (r *Record) Panicf(format string, args ...any) {
-	r.logf(PanicLevel, format, args)
-}
+func (r *Record) Panicf(format string, args ...any) { _ = "STUB: not implemented"; return }
 
 // ---------------------------------------------------------------------------
 // helper methods
 // ---------------------------------------------------------------------------
 
 // LevelName get
-func (r *Record) LevelName() string { return r.levelName }
+func (r *Record) LevelName() string {
+	_ = "STUB: not implemented"
 
-// GoString of the record
-func (r *Record) GoString() string {
-	return "slog: " + r.Message
+	// GoString of the record
+	return ""
 }
 
-func (r *Record) timestamp() string {
-	s := strconv.FormatInt(r.Time.UnixMicro(), 10)
-	return s[:10] + "." + s[10:]
-}
+func (r *Record) GoString() string { _ = "STUB: not implemented"; return "" }
+
+func (r *Record) timestamp() string { _ = "STUB: not implemented"; return "" }

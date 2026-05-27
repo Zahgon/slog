@@ -15,28 +15,20 @@ type IOWriterHandler struct {
 
 // TextFormatter get the formatter
 func (h *IOWriterHandler) TextFormatter() *slog.TextFormatter {
-	return h.Formatter().(*slog.TextFormatter)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Handle log record
-func (h *IOWriterHandler) Handle(record *slog.Record) error {
-	bts, err := h.Formatter().Format(record)
-	if err != nil {
-		return err
-	}
-
-	_, err = h.Output.Write(bts)
-	return err
-}
+func (h *IOWriterHandler) Handle(record *slog.Record) error { _ = "STUB: not implemented"; return nil }
 
 // NewIOWriterWithLF create new IOWriterHandler, with custom slog.LevelFormattable
 func NewIOWriterWithLF(out io.Writer, lf slog.LevelFormattable) *IOWriterHandler {
-	return &IOWriterHandler{
-		Output: out,
-		// init formatter and level handle
-		LevelFormattable: lf,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// init formatter and level handle
 
 //
 // ------------- Use max log level -------------
@@ -51,7 +43,8 @@ func NewIOWriterWithLF(out io.Writer, lf slog.LevelFormattable) *IOWriterHandler
 //	 slog.AddHandler(h)
 //		slog.Info("info message")
 func IOWriterWithMaxLevel(out io.Writer, maxLevel slog.Level) *IOWriterHandler {
-	return NewIOWriterWithLF(out, slog.NewLvFormatter(maxLevel))
+	_ = "STUB: not implemented"
+	return nil
 }
 
 //
@@ -60,12 +53,14 @@ func IOWriterWithMaxLevel(out io.Writer, maxLevel slog.Level) *IOWriterHandler {
 
 // NewIOWriter create a new instance and with limited log levels
 func NewIOWriter(out io.Writer, levels []slog.Level) *IOWriterHandler {
-	return NewIOWriterHandler(out, levels)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // IOWriterWithLevels create a new instance and with limited log levels
 func IOWriterWithLevels(out io.Writer, levels []slog.Level) *IOWriterHandler {
-	return NewIOWriterHandler(out, levels)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // NewIOWriterHandler create new IOWriterHandler
@@ -78,7 +73,8 @@ func IOWriterWithLevels(out io.Writer, levels []slog.Level) *IOWriterHandler {
 //	f, err := os.OpenFile("my.log", ...)
 //	h := handler.NewIOWriterHandler(f, slog.AllLevels)
 func NewIOWriterHandler(out io.Writer, levels []slog.Level) *IOWriterHandler {
-	return NewIOWriterWithLF(out, slog.NewLvsFormatter(levels))
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // SimpleHandler definition. alias of IOWriterHandler
@@ -86,17 +82,20 @@ type SimpleHandler = IOWriterHandler
 
 // NewHandler create a new instance
 func NewHandler(out io.Writer, maxLevel slog.Level) *SimpleHandler {
-	return NewSimpleHandler(out, maxLevel)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // NewSimple create a new instance
 func NewSimple(out io.Writer, maxLevel slog.Level) *SimpleHandler {
-	return NewSimpleHandler(out, maxLevel)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // SimpleWithLevels create new simple handler, with log levels
 func SimpleWithLevels(out io.Writer, levels []slog.Level) *IOWriterHandler {
-	return NewIOWriterHandler(out, levels)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // NewSimpleHandler create new SimpleHandler
@@ -109,5 +108,6 @@ func SimpleWithLevels(out io.Writer, levels []slog.Level) *IOWriterHandler {
 //	f, err := os.OpenFile("my.log", ...)
 //	h := handler.NewSimpleHandler(f, slog.InfoLevel)
 func NewSimpleHandler(out io.Writer, maxLevel slog.Level) *IOWriterHandler {
-	return IOWriterWithMaxLevel(out, maxLevel)
+	_ = "STUB: not implemented"
+	return nil
 }

@@ -1,56 +1,19 @@
 package rotatefile
 
 import (
-	"compress/gzip"
-	"fmt"
-	"io"
 	"io/fs"
-	"os"
 	"time"
-
-	"github.com/gookit/goutil"
-	"github.com/gookit/goutil/fsutil"
-	"github.com/gookit/goutil/timex"
 )
 
 const compressSuffix = ".gz"
 
-func printErrln(pfx string, err error) {
-	if err != nil {
-		_, _ = fmt.Fprintln(os.Stderr, pfx, err)
-	}
-}
+func printErrln(pfx string, err error) { _ = "STUB: not implemented"; return }
 
-func compressFile(srcPath, dstPath string) error {
-	srcFile, err := os.OpenFile(srcPath, os.O_RDONLY, 0)
-	if err != nil {
-		return err
-	}
-	defer srcFile.Close()
+func compressFile(srcPath, dstPath string) error { _ = "STUB: not implemented"; return nil }
 
-	// create and open a gz file
-	gzFile, err := fsutil.OpenTruncFile(dstPath)
-	if err != nil {
-		return err
-	}
-	defer gzFile.Close()
+// create and open a gz file
 
-	srcSt, err := srcFile.Stat()
-	if err != nil {
-		return err
-	}
-
-	zw := gzip.NewWriter(gzFile)
-	zw.Name = srcSt.Name()
-	zw.ModTime = srcSt.ModTime()
-
-	// do copy
-	if _, err = io.Copy(zw, srcFile); err != nil {
-		_ = zw.Close()
-		return err
-	}
-	return zw.Close()
-}
+// do copy
 
 // TODO replace to fsutil.FileInfo
 type fileInfo struct {
@@ -59,12 +22,11 @@ type fileInfo struct {
 }
 
 // Path get file full path. eg: "/path/to/file.go"
-func (fi *fileInfo) Path() string {
-	return fi.filePath
-}
+func (fi *fileInfo) Path() string { _ = "STUB: not implemented"; return "" }
 
 func newFileInfo(filePath string, fi fs.FileInfo) fileInfo {
-	return fileInfo{filePath: filePath, FileInfo: fi}
+	_ = "STUB: not implemented"
+	return *new(fileInfo)
 }
 
 // modTimeFInfos sorts by oldest time modified in the fileInfo.
@@ -72,42 +34,35 @@ func newFileInfo(filePath string, fi fs.FileInfo) fileInfo {
 type modTimeFInfos []fileInfo
 
 // Less check
-func (fis modTimeFInfos) Less(i, j int) bool {
-	return fis[j].ModTime().After(fis[i].ModTime())
-}
+func (fis modTimeFInfos) Less(i, j int) bool { _ = "STUB: not implemented"; return false }
 
 // Swap value
-func (fis modTimeFInfos) Swap(i, j int) {
-	fis[i], fis[j] = fis[j], fis[i]
-}
+func (fis modTimeFInfos) Swap(i, j int) { _ = "STUB: not implemented"; return }
 
 // Len get
 func (fis modTimeFInfos) Len() int {
-	return len(fis)
+	_ = "STUB: not implemented"
+
+	// MockClocker mock clock for test
+	return 0
 }
 
-// MockClocker mock clock for test
 type MockClocker struct {
 	tt time.Time
 }
 
 // NewMockClock create a mock time instance from datetime string.
-func NewMockClock(datetime string) *MockClocker {
-	nt := goutil.Must(timex.FromString(datetime))
-	return &MockClocker{tt: nt.Time}
-}
+func NewMockClock(datetime string) *MockClocker { _ = "STUB: not implemented"; return nil }
 
 // Now get current time.
 func (mt *MockClocker) Now() time.Time {
-	return mt.tt
+	_ = "STUB: not implemented"
+
+	// Add progresses time by the given duration.
+	return *new(time.Time)
 }
 
-// Add progresses time by the given duration.
-func (mt *MockClocker) Add(d time.Duration) {
-	mt.tt = mt.tt.Add(d)
-}
+func (mt *MockClocker) Add(d time.Duration) { _ = "STUB: not implemented"; return }
 
 // Datetime returns the current time in the format "2006-01-02 15:04:05".
-func (mt *MockClocker) Datetime() string {
-	return mt.tt.Format("2006-01-02 15:04:05")
-}
+func (mt *MockClocker) Datetime() string { _ = "STUB: not implemented"; return "" }

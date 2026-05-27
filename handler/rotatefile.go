@@ -1,31 +1,25 @@
 package handler
 
 import (
-	"github.com/gookit/goutil/x/basefn"
 	"github.com/gookit/slog/rotatefile"
 )
 
 // NewRotateFileHandler instance. It supports splitting log files by time and size
 func NewRotateFileHandler(logfile string, rt rotatefile.RotateTime, fns ...ConfigFn) (*SyncCloseHandler, error) {
-	cfg := NewConfig(fns...).With(WithLogfile(logfile), WithRotateTime(rt))
-
-	writer, err := cfg.RotateWriter()
-	if err != nil {
-		return nil, err
-	}
-
-	h := NewSyncCloseHandler(writer, cfg.Levels)
-	return h, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // MustRotateFile handler instance, will panic on create error
 func MustRotateFile(logfile string, rt rotatefile.RotateTime, fns ...ConfigFn) *SyncCloseHandler {
-	return basefn.Must(NewRotateFileHandler(logfile, rt, fns...))
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // NewRotateFile instance. alias of NewRotateFileHandler()
 func NewRotateFile(logfile string, rt rotatefile.RotateTime, fns ...ConfigFn) (*SyncCloseHandler, error) {
-	return NewRotateFileHandler(logfile, rt, fns...)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 //
@@ -36,19 +30,21 @@ func NewRotateFile(logfile string, rt rotatefile.RotateTime, fns ...ConfigFn) (*
 
 // MustSizeRotateFile instance
 func MustSizeRotateFile(logfile string, maxSize int, fns ...ConfigFn) *SyncCloseHandler {
-	return basefn.Must(NewSizeRotateFileHandler(logfile, maxSize, fns...))
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // NewSizeRotateFile instance
 func NewSizeRotateFile(logfile string, maxSize int, fns ...ConfigFn) (*SyncCloseHandler, error) {
-	return NewSizeRotateFileHandler(logfile, maxSize, fns...)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // NewSizeRotateFileHandler instance, default close rotate by time.
 func NewSizeRotateFileHandler(logfile string, maxSize int, fns ...ConfigFn) (*SyncCloseHandler, error) {
+	_ = "STUB: not implemented"
 	// close rotate by time.
-	fns = append(fns, WithMaxSize(uint64(maxSize)))
-	return NewRotateFileHandler(logfile, 0, fns...)
+	return nil, nil
 }
 
 //
@@ -84,16 +80,19 @@ const (
 
 // MustTimeRotateFile instance
 func MustTimeRotateFile(logfile string, rt rotatefile.RotateTime, fns ...ConfigFn) *SyncCloseHandler {
-	return basefn.Must(NewTimeRotateFileHandler(logfile, rt, fns...))
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // NewTimeRotateFile instance
 func NewTimeRotateFile(logfile string, rt rotatefile.RotateTime, fns ...ConfigFn) (*SyncCloseHandler, error) {
-	return NewTimeRotateFileHandler(logfile, rt, fns...)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // NewTimeRotateFileHandler instance, default close rotate by size
 func NewTimeRotateFileHandler(logfile string, rt rotatefile.RotateTime, fns ...ConfigFn) (*SyncCloseHandler, error) {
+	_ = "STUB: not implemented"
 	// default close rotate by size: WithMaxSize(0)
-	return NewRotateFileHandler(logfile, rt, append(fns, WithMaxSize(0))...)
+	return nil, nil
 }

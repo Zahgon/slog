@@ -23,73 +23,36 @@ package slog
 
 // Init something for record(eg: time, level name).
 func (r *Record) Init(lowerLevelName bool) {
-	r.inited = true
+	_ = "STUB: not implemented"
 
 	// use lower level name
-	if lowerLevelName {
-		r.levelName = r.Level.LowerName()
-	} else {
-		r.levelName = r.Level.Name()
-	}
-
-	// init log time
-	if r.Time.IsZero() {
-		r.Time = r.logger.TimeClock.Now()
-	}
-
-	// r.microSecond = r.Time.Nanosecond() / 1000
+	return
 }
+
+// init log time
+
+// r.microSecond = r.Time.Nanosecond() / 1000
 
 // Init something for record.
 func (r *Record) beforeHandle(l *Logger) {
+	_ = "STUB: not implemented"
 	// log caller. will alloc 3 times
-	if l.ReportCaller {
-		caller, ok := getCaller(r.CallerSkip)
-		if ok {
-			r.Caller = &caller
-		}
-	}
-
-	// processing log record
-	for i := range l.processors {
-		l.processors[i].Process(r)
-	}
+	return
 }
+
+// processing log record
 
 // do write record to handlers, will add lock.
-func (l *Logger) writeRecord(level Level, r *Record) {
-	l.mu.Lock()
-	defer l.mu.Unlock()
-	// reset init flag, useful for repeat use Record
-	r.inited = false
+func (l *Logger) writeRecord(level Level, r *Record) { _ = "STUB: not implemented"; return }
 
-	for _, handler := range l.handlers {
-		if handler.IsHandling(level) {
-			// init record, call processors
-			if !r.inited {
-				r.Init(l.LowerLevelName)
-				r.beforeHandle(l)
-			}
+// reset init flag, useful for repeat use Record
 
-			// do write a log message by handler
-			if err := handler.Handle(r); err != nil {
-				l.err = err
-				printStderr("slog: failed to handle log, error:", err)
-			}
-		}
-	}
+// init record, call processors
 
-	// ---- after write log ----
-	r.Time = emptyTime
+// do write a log message by handler
 
-	// flush logs on level <= error level.
-	if level <= ErrorLevel {
-		l.flushAll() // has been in lock
-	}
+// ---- after write log ----
 
-	if level <= PanicLevel {
-		l.PanicFunc(r)
-	} else if level <= FatalLevel {
-		l.Exit(1)
-	}
-}
+// flush logs on level <= error level.
+
+// has been in lock

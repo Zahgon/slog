@@ -1,12 +1,9 @@
 package rotatefile
 
 import (
-	"fmt"
 	"os"
-	"strconv"
 	"time"
 
-	"github.com/gookit/goutil/strutil"
 	"github.com/gookit/goutil/timex"
 )
 
@@ -47,51 +44,30 @@ const (
 
 // Interval get check interval time. unit is seconds.
 func (rt RotateTime) Interval() int64 {
-	return int64(rt)
+	_ = "STUB: not implemented"
+
+	// FirstCheckTime for a rotated file.
+	// - will automatically align the time from the start of each hour.
+	return 0
 }
 
-// FirstCheckTime for a rotated file.
-// - will automatically align the time from the start of each hour.
 func (rt RotateTime) FirstCheckTime(now time.Time) time.Time {
-	interval := rt.Interval()
-
-	switch rt.level() {
-	case levelDay:
-		return timex.DayEnd(now)
-	case levelHour:
-		// should check on H:59:59.500
-		return timex.HourStart(now).Add(timex.OneHour - 500*time.Millisecond)
-	case levelMin:
-		// eg: minutes=5
-		minutes := int(interval / 60)
-		nextMin := now.Minute() + minutes
-
-		// will rotate at next hour start. eg: now.Minute()=57, nextMin=62.
-		if nextMin >= 60 {
-			return timex.HourStart(now).Add(timex.OneHour)
-		}
-
-		// eg: now.Minute()=37, nextMin=42, will get nextDur=40
-		nextDur := time.Duration(nextMin).Round(time.Duration(minutes))
-		return timex.HourStart(now).Add(nextDur * time.Minute)
-	default: // levelSec
-		return now.Add(time.Duration(interval) * time.Second)
-	}
+	_ = "STUB: not implemented"
+	return *new(time.Time)
 }
+
+// should check on H:59:59.500
+
+// eg: minutes=5
+
+// will rotate at next hour start. eg: now.Minute()=57, nextMin=62.
+
+// eg: now.Minute()=37, nextMin=42, will get nextDur=40
+
+// levelSec
 
 // level for rotating time
-func (rt RotateTime) level() rotateLevel {
-	switch {
-	case rt >= timex.OneDaySec:
-		return levelDay
-	case rt >= timex.OneHourSec:
-		return levelHour
-	case rt >= EveryMinute:
-		return levelMin
-	default:
-		return levelSec
-	}
-}
+func (rt RotateTime) level() rotateLevel { _ = "STUB: not implemented"; return *new(rotateLevel) }
 
 // TimeFormat get log file suffix format
 //
@@ -102,69 +78,29 @@ func (rt RotateTime) level() rotateLevel {
 //   - "error.log.20201223_1500"
 //   - "error.log.20201223_1530"
 //   - "error.log.20201223_1523"
-func (rt RotateTime) TimeFormat() (suffixFormat string) {
-	suffixFormat = "20060102_1500" // default is levelHour
-	switch rt.level() {
-	case levelDay:
-		suffixFormat = "20060102"
-	case levelHour:
-		suffixFormat = "20060102_1500"
-	case levelMin:
-		suffixFormat = "20060102_1504"
-	case levelSec:
-		suffixFormat = "20060102_150405"
-	}
-	return
-}
+func (rt RotateTime) TimeFormat() (suffixFormat string) { _ = "STUB: not implemented"; return "" }
+
+// default is levelHour
 
 // MarshalJSON implement the JSON Marshal interface [encoding/json.Marshaler]
-func (rt RotateTime) MarshalJSON() ([]byte, error) {
-	return []byte(fmt.Sprintf(`"%ds"`, rt.Interval())), nil
-}
+func (rt RotateTime) MarshalJSON() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // UnmarshalJSON implement the JSON Unmarshal interface [encoding/json.Unmarshaler]
-func (rt *RotateTime) UnmarshalJSON(data []byte) error {
-	s, err := strconv.Unquote(string(data))
-	if err != nil {
-		return err
-	}
-
-	*rt, err = StringToRotateTime(s)
-	return err
-}
+func (rt *RotateTime) UnmarshalJSON(data []byte) error { _ = "STUB: not implemented"; return nil }
 
 // String rotate type to string
-func (rt RotateTime) String() string {
-	switch rt.level() {
-	case levelDay:
-		return fmt.Sprintf("Every %d Day", rt.Interval()/timex.OneDaySec)
-	case levelHour:
-		return fmt.Sprintf("Every %d Hours", rt.Interval()/timex.OneHourSec)
-	case levelMin:
-		return fmt.Sprintf("Every %d Minutes", rt.Interval()/timex.OneMinSec)
-	default: // levelSec
-		return fmt.Sprintf("Every %d Seconds", rt.Interval())
-	}
-}
+func (rt RotateTime) String() string { _ = "STUB: not implemented"; return "" }
+
+// levelSec
 
 // StringToRotateTime parse and convert string to RotateTime
 func StringToRotateTime(s string) (RotateTime, error) {
+	_ = "STUB: not implemented"
 	// is int value, try to parse as seconds
-	if strutil.IsInt(s) {
-		iVal := strutil.SafeInt(s)
-		if iVal < 0 || iVal > timex.OneMonthSec*3 {
-			return 0, fmt.Errorf("rotatefile: invalid rotate time: %s", s)
-		}
-		return RotateTime(iVal), nil
-	}
-
-	// parse time duration string. eg: "1h", "1m", "1d"
-	rtDur, err := timex.ToDuration(s)
-	if err != nil {
-		return 0, err
-	}
-	return RotateTime(rtDur.Seconds()), nil
+	return *new(RotateTime), nil
 }
+
+// parse time duration string. eg: "1h", "1m", "1d"
 
 //
 // ---------------------------- RotateMode -------------------------------
@@ -190,51 +126,21 @@ const (
 )
 
 // String get string name
-func (m RotateMode) String() string {
-	switch m {
-	case ModeRename:
-		return "rename"
-	case ModeCreate:
-		return "create"
-	default:
-		return "unknown"
-	}
-}
+func (m RotateMode) String() string { _ = "STUB: not implemented"; return "" }
 
 // MarshalJSON implement the JSON Marshal interface [encoding/json.Marshaler]
-func (m RotateMode) MarshalJSON() ([]byte, error) {
-	return []byte(`"` + m.String() + `"`), nil
-}
+func (m RotateMode) MarshalJSON() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // UnmarshalJSON implement the JSON Unmarshal interface [encoding/json.Unmarshaler]
-func (m *RotateMode) UnmarshalJSON(data []byte) error {
-	s, err := strconv.Unquote(string(data))
-	if err != nil {
-		return err
-	}
-
-	*m, err = StringToRotateMode(s)
-	return err
-}
+func (m *RotateMode) UnmarshalJSON(data []byte) error { _ = "STUB: not implemented"; return nil }
 
 // StringToRotateMode convert string to RotateMode
 func StringToRotateMode(s string) (RotateMode, error) {
-	switch s {
-	case "rename":
-		return ModeRename, nil
-	case "create", "make":
-		return ModeCreate, nil
-	default:
-		// is int value, try to parse as int
-		if strutil.IsInt(s) {
-			iVal := strutil.SafeInt(s)
-			if iVal >= int(ModeRename) && iVal <= int(ModeCreate) {
-				return RotateMode(iVal), nil
-			}
-		}
-		return 0, fmt.Errorf("rotatefile: invalid rotate mode: %s", s)
-	}
+	_ = "STUB: not implemented"
+	return *new(RotateMode), nil
 }
+
+// is int value, try to parse as int
 
 //
 // ---------------------------- Clocker -------------------------------
@@ -250,10 +156,12 @@ type ClockFn func() time.Time
 
 // Now implements the Clocker
 func (fn ClockFn) Now() time.Time {
-	return fn()
+	_ = "STUB: not implemented"
+
+	// ConfigFn for setting config
+	return *new(time.Time)
 }
 
-// ConfigFn for setting config
 type ConfigFn func(c *Config)
 
 // Config struct for rotate dispatcher
@@ -321,25 +229,22 @@ type Config struct {
 }
 
 func (c *Config) backupDuration() time.Duration {
-	if c.BackupTime < 1 {
-		return 0
-	}
-	return time.Duration(c.BackupTime) * time.Hour
+	_ = "STUB: not implemented"
+	return *new(time.Duration)
 }
 
 // With more config setting func
-func (c *Config) With(fns ...ConfigFn) *Config {
-	for _, fn := range fns {
-		fn(c)
-	}
-	return c
-}
+func (c *Config) With(fns ...ConfigFn) *Config { _ = "STUB: not implemented"; return nil }
 
 // Create new Writer by config
-func (c *Config) Create() (*Writer, error) { return NewWriter(c) }
+func (c *Config) Create() (*Writer, error) {
+	_ = "STUB: not implemented"
 
-// IsMode check rotate mode
-func (c *Config) IsMode(m RotateMode) bool { return c.RotateMode == m }
+	// IsMode check rotate mode
+	return nil, nil
+}
+
+func (c *Config) IsMode(m RotateMode) bool { _ = "STUB: not implemented"; return false }
 
 var (
 	// DefaultFilePerm perm and flags for create log file
@@ -354,54 +259,40 @@ var (
 )
 
 // NewDefaultConfig instance
-func NewDefaultConfig() *Config {
-	return &Config{
-		MaxSize:    DefaultMaxSize,
-		RotateTime: EveryHour,
-		BackupNum:  DefaultBackNum,
-		BackupTime: DefaultBackTime,
-		// RenameFunc: DefaultFilenameFn,
-		TimeClock: DefaultTimeClockFn,
-		FilePerm:  DefaultFilePerm,
-	}
-}
+func NewDefaultConfig() *Config { _ = "STUB: not implemented"; return nil }
+
+// RenameFunc: DefaultFilenameFn,
 
 // NewConfig by file path, and can with custom setting
-func NewConfig(filePath string, fns ...ConfigFn) *Config {
-	if len(fns) == 0 {
-		return NewConfigWith(WithFilepath(filePath))
-	}
-	return NewConfigWith(append(fns, WithFilepath(filePath))...)
-}
+func NewConfig(filePath string, fns ...ConfigFn) *Config { _ = "STUB: not implemented"; return nil }
 
 // NewConfigWith custom func
-func NewConfigWith(fns ...ConfigFn) *Config {
-	return NewDefaultConfig().With(fns...)
-}
+func NewConfigWith(fns ...ConfigFn) *Config { _ = "STUB: not implemented"; return nil }
 
 // EmptyConfigWith new empty config with custom func
 func EmptyConfigWith(fns ...ConfigFn) *Config {
-	c := &Config{
-		// RenameFunc: DefaultFilenameFn,
-		TimeClock: DefaultTimeClockFn,
-		FilePerm:  DefaultFilePerm,
-	}
+	_ = "STUB: not implemented"
 
-	return c.With(fns...)
+	// RenameFunc: DefaultFilenameFn,
+	return nil
 }
 
 // WithFilepath setting
-func WithFilepath(logfile string) ConfigFn {
-	return func(c *Config) { c.Filepath = logfile }
-}
+func WithFilepath(logfile string) ConfigFn { _ = "STUB: not implemented"; return *new(ConfigFn) }
 
 // WithDebugMode setting for debug mode
-func WithDebugMode(c *Config) { c.DebugMode = true }
+func WithDebugMode(c *Config) {
+	_ = "STUB: not implemented"
 
-// WithCompress setting for compress
-func WithCompress(c *Config) { c.Compress = true }
-
-// WithBackupNum setting for backup number
-func WithBackupNum(num uint) ConfigFn {
-	return func(c *Config) { c.BackupNum = num }
+	// WithCompress setting for compress
+	return
 }
+
+func WithCompress(c *Config) {
+	_ = "STUB: not implemented"
+
+	// WithBackupNum setting for backup number
+	return
+}
+
+func WithBackupNum(num uint) ConfigFn { _ = "STUB: not implemented"; return *new(ConfigFn) }

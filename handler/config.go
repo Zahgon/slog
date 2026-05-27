@@ -1,15 +1,10 @@
 package handler
 
 import (
-	"encoding/json"
 	"io"
 	"io/fs"
-	"strings"
 
-	"github.com/gookit/goutil/errorx"
-	"github.com/gookit/goutil/fsutil"
 	"github.com/gookit/slog"
-	"github.com/gookit/slog/bufwrite"
 	"github.com/gookit/slog/rotatefile"
 )
 
@@ -96,129 +91,58 @@ type Config struct {
 }
 
 // NewEmptyConfig new config instance
-func NewEmptyConfig(fns ...ConfigFn) *Config {
-	c := &Config{Levels: slog.AllLevels}
-	return c.WithConfigFn(fns...)
-}
+func NewEmptyConfig(fns ...ConfigFn) *Config { _ = "STUB: not implemented"; return nil }
 
 // NewConfig new config instance with some default settings.
-func NewConfig(fns ...ConfigFn) *Config {
-	c := &Config{
-		Levels:   slog.AllLevels,
-		BuffMode: BuffModeLine,
-		BuffSize: DefaultBufferSize,
-		// rotate file settings
-		MaxSize:    rotatefile.DefaultMaxSize,
-		RotateTime: rotatefile.EveryHour,
-		// old files clean settings
-		BackupNum:  rotatefile.DefaultBackNum,
-		BackupTime: rotatefile.DefaultBackTime,
-		DebugMode:  slog.DebugMode,
-	}
+func NewConfig(fns ...ConfigFn) *Config { _ = "STUB: not implemented"; return nil }
 
-	return c.WithConfigFn(fns...)
-}
+// rotate file settings
+
+// old files clean settings
 
 // FromJSON load config from json string
-func (c *Config) FromJSON(bts []byte) error { return json.Unmarshal(bts, c) }
+func (c *Config) FromJSON(bts []byte) error { _ = "STUB: not implemented"; return nil }
 
 // With more config settings func
-func (c *Config) With(fns ...ConfigFn) *Config { return c.WithConfigFn(fns...) }
+func (c *Config) With(fns ...ConfigFn) *Config { _ = "STUB: not implemented"; return nil }
 
 // WithConfigFn more config settings func
-func (c *Config) WithConfigFn(fns ...ConfigFn) *Config {
-	for _, fn := range fns {
-		fn(c)
-	}
-	return c
-}
+func (c *Config) WithConfigFn(fns ...ConfigFn) *Config { _ = "STUB: not implemented"; return nil }
 
 func (c *Config) newLevelFormattable() slog.LevelFormattable {
-	if c.LevelMode == LevelModeValue {
-		return slog.NewLvFormatter(c.Level)
-	}
-	return slog.NewLvsFormatter(c.Levels)
+	_ = "STUB: not implemented"
+	return *new(slog.LevelFormattable)
 }
 
 // CreateHandler quick create a handler by config
 func (c *Config) CreateHandler() (*SyncCloseHandler, error) {
-	output, err := c.CreateWriter()
-	if err != nil {
-		return nil, err
-	}
-
-	h := &SyncCloseHandler{
-		Output: output,
-		// with log level and formatter
-		LevelFormattable: c.newLevelFormattable(),
-	}
-
-	if c.UseJSON {
-		h.SetFormatter(slog.NewJSONFormatter())
-	}
-	return h, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+// with log level and formatter
 
 // RotateWriter build rotate writer by config
 func (c *Config) RotateWriter() (output SyncCloseWriter, err error) {
-	if c.MaxSize == 0 && c.RotateTime == 0 {
-		return nil, errorx.E("slog: cannot create rotate writer, MaxSize and RotateTime both is 0")
-	}
-
-	return c.CreateWriter()
+	_ = "STUB: not implemented"
+	return *new(SyncCloseWriter), nil
 }
 
 // CreateWriter build writer by config
 func (c *Config) CreateWriter() (output SyncCloseWriter, err error) {
-	if c.Logfile == "" {
-		return nil, errorx.Raw("slog: logfile cannot be empty for create writer")
-	}
-	if c.FilePerm == 0 {
-		c.FilePerm = rotatefile.DefaultFilePerm
-	}
-
-	// create a rotated writer by config.
-	if c.MaxSize > 0 || c.RotateTime > 0 {
-		rc := rotatefile.EmptyConfigWith()
-
-		// has locked on logger.write()
-		rc.CloseLock = true
-		rc.Filepath = c.Logfile
-		rc.FilePerm = c.FilePerm
-		rc.DebugMode = c.DebugMode
-
-		// copy settings
-		rc.MaxSize = c.MaxSize
-		rc.RotateTime = c.RotateTime
-		rc.RotateMode = c.RotateMode
-		rc.BackupNum = c.BackupNum
-		rc.BackupTime = c.BackupTime
-		rc.Compress = c.Compress
-		rc.CleanOnClose = c.CleanOnClose
-
-		if c.RenameFunc != nil {
-			rc.RenameFunc = c.RenameFunc
-		}
-		if c.TimeClock != nil {
-			rc.TimeClock = c.TimeClock
-		}
-
-		output, err = rc.Create()
-	} else {
-		// create a file writer
-		output, err = fsutil.OpenAppendFile(c.Logfile, c.FilePerm)
-	}
-
-	if err != nil {
-		return nil, err
-	}
-
-	// wrap buffer
-	if c.BuffSize > 0 {
-		output = c.wrapBuffer(output)
-	}
-	return
+	_ = "STUB: not implemented"
+	return *new(SyncCloseWriter), nil
 }
+
+// create a rotated writer by config.
+
+// has locked on logger.write()
+
+// copy settings
+
+// create a file writer
+
+// wrap buffer
 
 type flushSyncCloseWriter interface {
 	FlushCloseWriter
@@ -227,12 +151,8 @@ type flushSyncCloseWriter interface {
 
 // wrap buffer for the writer
 func (c *Config) wrapBuffer(w io.Writer) (bw flushSyncCloseWriter) {
-	if c.BuffMode == BuffModeLine {
-		bw = bufwrite.NewLineWriterSize(w, c.BuffSize)
-	} else {
-		bw = bufwrite.NewBufIOWriterSize(w, c.BuffSize)
-	}
-	return bw
+	_ = "STUB: not implemented"
+	return *new(flushSyncCloseWriter)
 }
 
 //
@@ -242,134 +162,81 @@ func (c *Config) wrapBuffer(w io.Writer) (bw flushSyncCloseWriter) {
 //
 
 // WithLogfile setting
-func WithLogfile(logfile string) ConfigFn {
-	return func(c *Config) { c.Logfile = logfile }
-}
+func WithLogfile(logfile string) ConfigFn { _ = "STUB: not implemented"; return *new(ConfigFn) }
 
 // WithFilePerm setting
-func WithFilePerm(filePerm fs.FileMode) ConfigFn {
-	return func(c *Config) { c.FilePerm = filePerm }
-}
+func WithFilePerm(filePerm fs.FileMode) ConfigFn { _ = "STUB: not implemented"; return *new(ConfigFn) }
 
 // WithLevelMode setting
-func WithLevelMode(lm slog.LevelMode) ConfigFn {
-	return func(c *Config) { c.LevelMode = lm }
-}
+func WithLevelMode(lm slog.LevelMode) ConfigFn { _ = "STUB: not implemented"; return *new(ConfigFn) }
 
 // WithLevelModeString setting
-func WithLevelModeString(s string) ConfigFn {
-	return func(c *Config) { c.LevelMode = slog.SafeToLevelMode(s) }
-}
+func WithLevelModeString(s string) ConfigFn { _ = "STUB: not implemented"; return *new(ConfigFn) }
 
 // WithLogLevel setting max log level
-func WithLogLevel(level slog.Level) ConfigFn {
-	return func(c *Config) {
-		c.Level = level
-		c.LevelMode = LevelModeValue
-	}
-}
+func WithLogLevel(level slog.Level) ConfigFn { _ = "STUB: not implemented"; return *new(ConfigFn) }
 
 // WithLevelName setting max level by name
-func WithLevelName(name string) ConfigFn { return WithLogLevel(slog.LevelByName(name)) }
+func WithLevelName(name string) ConfigFn { _ = "STUB: not implemented"; return *new(ConfigFn) }
 
 // WithMaxLevelName setting max level by name
-func WithMaxLevelName(name string) ConfigFn { return WithLogLevel(slog.LevelByName(name)) }
+func WithMaxLevelName(name string) ConfigFn { _ = "STUB: not implemented"; return *new(ConfigFn) }
 
 // WithLogLevels setting
-func WithLogLevels(levels slog.Levels) ConfigFn {
-	return func(c *Config) {
-		c.Levels = levels
-		c.LevelMode = LevelModeList
-	}
-}
+func WithLogLevels(levels slog.Levels) ConfigFn { _ = "STUB: not implemented"; return *new(ConfigFn) }
 
 // WithLevelNamesString setting multi levels by level names string, multi names split by comma.
-func WithLevelNamesString(names string) ConfigFn {
-	return WithLevelNames(strings.Split(names, ","))
-}
+func WithLevelNamesString(names string) ConfigFn { _ = "STUB: not implemented"; return *new(ConfigFn) }
 
 // WithLevelNames set multi levels by level names.
-func WithLevelNames(names []string) ConfigFn {
-	levels := make([]slog.Level, 0, len(names))
-	for _, name := range names {
-		levels = append(levels, slog.LevelByName(name))
-	}
-	return WithLogLevels(levels)
-}
+func WithLevelNames(names []string) ConfigFn { _ = "STUB: not implemented"; return *new(ConfigFn) }
 
 // WithRotateTime setting the rotated time
 func WithRotateTime(rt rotatefile.RotateTime) ConfigFn {
-	return func(c *Config) { c.RotateTime = rt }
+	_ = "STUB: not implemented"
+	return *new(ConfigFn)
 }
 
 // WithRotateTimeString setting the rotated time by string.
 //
 // eg: "1hour", "24h", "1day", "7d", "1m", "30s"
-func WithRotateTimeString(s string) ConfigFn {
-	return func(c *Config) {
-		rt, err := rotatefile.StringToRotateTime(s)
-		if err != nil {
-			panic(err)
-		}
-		c.RotateTime = rt
-	}
-}
+func WithRotateTimeString(s string) ConfigFn { _ = "STUB: not implemented"; return *new(ConfigFn) }
 
 // WithRotateMode setting rotating mode rotatefile.RotateMode
 func WithRotateMode(m rotatefile.RotateMode) ConfigFn {
-	return func(c *Config) { c.RotateMode = m }
+	_ = "STUB: not implemented"
+	return *new(ConfigFn)
 }
 
 // WithRotateModeString setting rotatefile.RotateMode by string.
-func WithRotateModeString(s string) ConfigFn {
-	return func(c *Config) {
-		m, err := rotatefile.StringToRotateMode(s)
-		if err != nil {
-			panic(err)
-		}
-		c.RotateMode = m
-	}
-}
+func WithRotateModeString(s string) ConfigFn { _ = "STUB: not implemented"; return *new(ConfigFn) }
 
 // WithTimeClock setting
 func WithTimeClock(clock rotatefile.Clocker) ConfigFn {
-	return func(c *Config) { c.TimeClock = clock }
+	_ = "STUB: not implemented"
+	return *new(ConfigFn)
 }
 
 // WithBackupNum setting
-func WithBackupNum(n uint) ConfigFn {
-	return func(c *Config) { c.BackupNum = n }
-}
+func WithBackupNum(n uint) ConfigFn { _ = "STUB: not implemented"; return *new(ConfigFn) }
 
 // WithBackupTime setting backup time
-func WithBackupTime(bt uint) ConfigFn {
-	return func(c *Config) { c.BackupTime = bt }
-}
+func WithBackupTime(bt uint) ConfigFn { _ = "STUB: not implemented"; return *new(ConfigFn) }
 
 // WithBuffMode setting buffer mode
-func WithBuffMode(buffMode string) ConfigFn {
-	return func(c *Config) { c.BuffMode = buffMode }
-}
+func WithBuffMode(buffMode string) ConfigFn { _ = "STUB: not implemented"; return *new(ConfigFn) }
 
 // WithBuffSize setting buffer size, unit is bytes.
-func WithBuffSize(buffSize int) ConfigFn {
-	return func(c *Config) { c.BuffSize = buffSize }
-}
+func WithBuffSize(buffSize int) ConfigFn { _ = "STUB: not implemented"; return *new(ConfigFn) }
 
 // WithMaxSize setting max size for a rotated file
-func WithMaxSize(maxSize uint64) ConfigFn {
-	return func(c *Config) { c.MaxSize = maxSize }
-}
+func WithMaxSize(maxSize uint64) ConfigFn { _ = "STUB: not implemented"; return *new(ConfigFn) }
 
 // WithCompress setting compress
-func WithCompress(compress bool) ConfigFn {
-	return func(c *Config) { c.Compress = compress }
-}
+func WithCompress(compress bool) ConfigFn { _ = "STUB: not implemented"; return *new(ConfigFn) }
 
 // WithUseJSON setting uses JSON format
-func WithUseJSON(useJSON bool) ConfigFn {
-	return func(c *Config) { c.UseJSON = useJSON }
-}
+func WithUseJSON(useJSON bool) ConfigFn { _ = "STUB: not implemented"; return *new(ConfigFn) }
 
 // WithDebugMode setting for debug mode
-func WithDebugMode(c *Config) { c.DebugMode = true }
+func WithDebugMode(c *Config) { _ = "STUB: not implemented"; return }

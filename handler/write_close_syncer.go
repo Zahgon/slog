@@ -14,12 +14,11 @@ type SyncCloseHandler struct {
 
 // NewSyncCloserWithLF create new SyncCloseHandler, with custom slog.LevelFormattable
 func NewSyncCloserWithLF(out SyncCloseWriter, lf slog.LevelFormattable) *SyncCloseHandler {
-	return &SyncCloseHandler{
-		Output: out,
-		// init formatter and level handle
-		LevelFormattable: lf,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// init formatter and level handle
 
 //
 // ------------- Use max log level -------------
@@ -27,7 +26,8 @@ func NewSyncCloserWithLF(out SyncCloseWriter, lf slog.LevelFormattable) *SyncClo
 
 // SyncCloserWithMaxLevel create new SyncCloseHandler, with max log level
 func SyncCloserWithMaxLevel(out SyncCloseWriter, maxLevel slog.Level) *SyncCloseHandler {
-	return NewSyncCloserWithLF(out, slog.NewLvFormatter(maxLevel))
+	_ = "STUB: not implemented"
+	return nil
 }
 
 //
@@ -36,12 +36,14 @@ func SyncCloserWithMaxLevel(out SyncCloseWriter, maxLevel slog.Level) *SyncClose
 
 // NewSyncCloser create new SyncCloseHandler, alias of NewSyncCloseHandler()
 func NewSyncCloser(out SyncCloseWriter, levels []slog.Level) *SyncCloseHandler {
-	return NewSyncCloseHandler(out, levels)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // SyncCloserWithLevels create new SyncCloseHandler, alias of NewSyncCloseHandler()
 func SyncCloserWithLevels(out SyncCloseWriter, levels []slog.Level) *SyncCloseHandler {
-	return NewSyncCloseHandler(out, levels)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // NewSyncCloseHandler create new SyncCloseHandler with limited log levels
@@ -51,34 +53,22 @@ func SyncCloserWithLevels(out SyncCloseWriter, levels []slog.Level) *SyncCloseHa
 //	f, err := os.OpenFile("my.log", ...)
 //	h := handler.NewSyncCloseHandler(f, slog.AllLevels)
 func NewSyncCloseHandler(out SyncCloseWriter, levels []slog.Level) *SyncCloseHandler {
-	return NewSyncCloserWithLF(out, slog.NewLvsFormatter(levels))
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Close the handler
-func (h *SyncCloseHandler) Close() error {
-	if err := h.Flush(); err != nil {
-		return err
-	}
-	return h.Output.Close()
-}
+func (h *SyncCloseHandler) Close() error { _ = "STUB: not implemented"; return nil }
 
 // Flush the handler
-func (h *SyncCloseHandler) Flush() error {
-	return h.Output.Sync()
-}
+func (h *SyncCloseHandler) Flush() error { _ = "STUB: not implemented"; return nil }
 
 // Writer of the handler
 func (h *SyncCloseHandler) Writer() io.Writer {
-	return h.Output
+	_ = "STUB: not implemented"
+
+	// Handle log record
+	return *new(io.Writer)
 }
 
-// Handle log record
-func (h *SyncCloseHandler) Handle(record *slog.Record) error {
-	bts, err := h.Formatter().Format(record)
-	if err != nil {
-		return err
-	}
-
-	_, err = h.Output.Write(bts)
-	return err
-}
+func (h *SyncCloseHandler) Handle(record *slog.Record) error { _ = "STUB: not implemented"; return nil }

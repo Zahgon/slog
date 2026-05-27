@@ -1,8 +1,6 @@
 package slog
 
 import (
-	"encoding/json"
-
 	"github.com/valyala/bytebufferpool"
 )
 
@@ -49,88 +47,43 @@ type JSONFormatter struct {
 
 // NewJSONFormatter create new JSONFormatter
 func NewJSONFormatter(fn ...func(f *JSONFormatter)) *JSONFormatter {
-	f := &JSONFormatter{
-		// Aliases: make(StringMap, 0),
-		Fields:     DefaultFields,
-		TimeFormat: DefaultTimeFormat,
-	}
+	_ = "STUB: not implemented"
+	return nil
 
-	if len(fn) > 0 {
-		fn[0](f)
-	}
-	return f
+	// Aliases: make(StringMap, 0),
 }
 
 // Configure current formatter
 func (f *JSONFormatter) Configure(fn func(*JSONFormatter)) *JSONFormatter {
-	fn(f)
-	return f
+	_ = "STUB: not implemented"
+
+	// AddField for export
+	return nil
 }
 
-// AddField for export
-func (f *JSONFormatter) AddField(name string) *JSONFormatter {
-	f.Fields = append(f.Fields, name)
-	return f
-}
+func (f *JSONFormatter) AddField(name string) *JSONFormatter { _ = "STUB: not implemented"; return nil }
 
 var jsonPool bytebufferpool.Pool
 
 // Format a log record to JSON bytes
 func (f *JSONFormatter) Format(r *Record) ([]byte, error) {
-	logData := make(M, len(f.Fields))
-
-	// TODO perf: use buf write build JSON string.
-	for _, field := range f.Fields {
-		outName, ok := f.Aliases[field]
-		if !ok {
-			outName = field
-		}
-
-		switch {
-		case field == FieldKeyDatetime:
-			logData[outName] = r.Time.Format(f.TimeFormat)
-		case field == FieldKeyTimestamp:
-			logData[outName] = r.timestamp()
-		case field == FieldKeyCaller && r.Caller != nil:
-			logData[outName] = formatCaller(r.Caller, r.CallerFlag, f.CallerFormatFunc)
-		case field == FieldKeyLevel:
-			logData[outName] = r.LevelName()
-		case field == FieldKeyChannel:
-			logData[outName] = r.Channel
-		case field == FieldKeyMessage:
-			logData[outName] = r.Message
-		case field == FieldKeyData:
-			logData[outName] = r.Data
-		case field == FieldKeyExtra:
-			logData[outName] = r.Extra
-			// default:
-			// 	logData[outName] = r.Fields[field]
-		}
-	}
-
-	// exported custom record fields
-	for field, value := range r.Fields {
-		fieldKey := field
-		if _, has := logData[field]; has {
-			fieldKey = "fields." + field
-		}
-		logData[fieldKey] = value
-	}
-
-	// sort.Interface()
-	buf := jsonPool.Get()
-	// buf.Reset()
-	defer jsonPool.Put(buf)
-	// buf := r.NewBuffer()
-	// buf.Reset()
-	// buf.Grow(256)
-
-	encoder := json.NewEncoder(buf)
-	if f.PrettyPrint {
-		encoder.SetIndent("", "  ")
-	}
-
-	// has been added newline in Encode().
-	err := encoder.Encode(logData)
-	return buf.Bytes(), err
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+// TODO perf: use buf write build JSON string.
+
+// default:
+// 	logData[outName] = r.Fields[field]
+
+// exported custom record fields
+
+// sort.Interface()
+
+// buf.Reset()
+
+// buf := r.NewBuffer()
+// buf.Reset()
+// buf.Grow(256)
+
+// has been added newline in Encode().

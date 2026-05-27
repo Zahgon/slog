@@ -1,11 +1,7 @@
 package slog
 
 import (
-	"fmt"
 	"io"
-	"strconv"
-
-	"github.com/gookit/goutil/strutil"
 )
 
 //
@@ -56,19 +52,17 @@ type LevelWithFormatter struct {
 }
 
 // NewLvFormatter create new LevelWithFormatter instance
-func NewLvFormatter(maxLv Level) *LevelWithFormatter {
-	return &LevelWithFormatter{Level: maxLv}
-}
+func NewLvFormatter(maxLv Level) *LevelWithFormatter { _ = "STUB: not implemented"; return nil }
 
 // SetMaxLevel set max level for logging messages
 func (h *LevelWithFormatter) SetMaxLevel(maxLv Level) {
-	h.Level = maxLv
+	_ = "STUB: not implemented"
+
+	// IsHandling Check if the current level can be handling
+	return
 }
 
-// IsHandling Check if the current level can be handling
-func (h *LevelWithFormatter) IsHandling(level Level) bool {
-	return h.Level.ShouldHandling(level)
-}
+func (h *LevelWithFormatter) IsHandling(level Level) bool { _ = "STUB: not implemented"; return false }
 
 // LevelsWithFormatter struct definition
 //
@@ -81,55 +75,29 @@ type LevelsWithFormatter struct {
 }
 
 // NewLvsFormatter create new instance
-func NewLvsFormatter(levels []Level) *LevelsWithFormatter {
-	return &LevelsWithFormatter{Levels: levels}
-}
+func NewLvsFormatter(levels []Level) *LevelsWithFormatter { _ = "STUB: not implemented"; return nil }
 
 // SetLimitLevels set limit levels for log message
 func (h *LevelsWithFormatter) SetLimitLevels(levels []Level) {
-	h.Levels = levels
+	_ = "STUB: not implemented"
+
+	// IsHandling Check if the current level can be handling
+	return
 }
 
-// IsHandling Check if the current level can be handling
-func (h *LevelsWithFormatter) IsHandling(level Level) bool {
-	for _, l := range h.Levels {
-		if l == level {
-			return true
-		}
-	}
-	return false
-}
+func (h *LevelsWithFormatter) IsHandling(level Level) bool { _ = "STUB: not implemented"; return false }
 
 // LevelMode define level mode for logging
 type LevelMode uint8
 
 // MarshalJSON implement the JSON Marshal interface [encoding/json.Marshaler]
-func (m LevelMode) MarshalJSON() ([]byte, error) {
-	return []byte(`"` + m.String() + `"`), nil
-}
+func (m LevelMode) MarshalJSON() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // UnmarshalJSON implement the JSON Unmarshal interface [encoding/json.Unmarshaler]
-func (m *LevelMode) UnmarshalJSON(data []byte) error {
-	s, err := strconv.Unquote(string(data))
-	if err != nil {
-		return err
-	}
-
-	*m, err = StringToLevelMode(s)
-	return err
-}
+func (m *LevelMode) UnmarshalJSON(data []byte) error { _ = "STUB: not implemented"; return nil }
 
 // String return string value
-func (m LevelMode) String() string {
-	switch m {
-	case LevelModeList:
-		return "list"
-	case LevelModeMax:
-		return "max"
-	default:
-		return "unknown"
-	}
-}
+func (m LevelMode) String() string { _ = "STUB: not implemented"; return "" }
 
 const (
 	// LevelModeList use level list for limit record write
@@ -139,32 +107,15 @@ const (
 )
 
 // SafeToLevelMode parse string value to LevelMode, fail return LevelModeList
-func SafeToLevelMode(s string) LevelMode {
-	lm, err := StringToLevelMode(s)
-	if err != nil {
-		return LevelModeList
-	}
-	return lm
-}
+func SafeToLevelMode(s string) LevelMode { _ = "STUB: not implemented"; return *new(LevelMode) }
 
 // StringToLevelMode parse string value to LevelMode
 func StringToLevelMode(s string) (LevelMode, error) {
-	switch s {
-	case "", "list", "list_level", "level_list":
-		return LevelModeList, nil
-	case "max", "max_level", "level_max":
-		return LevelModeMax, nil
-	default:
-		// is int value, try to parse as int
-		if strutil.IsInt(s) {
-			iVal := strutil.SafeInt(s)
-			if iVal >= 0 && iVal <= int(LevelModeMax) {
-				return LevelMode(iVal), nil
-			}
-		}
-		return 0, fmt.Errorf("slog: invalid level mode: %s", s)
-	}
+	_ = "STUB: not implemented"
+	return *new(LevelMode), nil
 }
+
+// is int value, try to parse as int
 
 // LevelHandling struct definition
 type LevelHandling struct {
@@ -177,30 +128,13 @@ type LevelHandling struct {
 }
 
 // SetMaxLevel set max level for a log message
-func (h *LevelHandling) SetMaxLevel(maxLv Level) {
-	h.lvMode = LevelModeMax
-	h.maxLevel = maxLv
-}
+func (h *LevelHandling) SetMaxLevel(maxLv Level) { _ = "STUB: not implemented"; return }
 
 // SetLimitLevels set limit levels for log message
-func (h *LevelHandling) SetLimitLevels(levels []Level) {
-	h.lvMode = LevelModeList
-	h.levels = levels
-}
+func (h *LevelHandling) SetLimitLevels(levels []Level) { _ = "STUB: not implemented"; return }
 
 // IsHandling Check if the current level can be handling
-func (h *LevelHandling) IsHandling(level Level) bool {
-	if h.lvMode == LevelModeMax {
-		return h.maxLevel.ShouldHandling(level)
-	}
-
-	for _, l := range h.levels {
-		if l == level {
-			return true
-		}
-	}
-	return false
-}
+func (h *LevelHandling) IsHandling(level Level) bool { _ = "STUB: not implemented"; return false }
 
 // LevelFormatting wrap level handling and log formatter
 type LevelFormatting struct {
@@ -209,15 +143,7 @@ type LevelFormatting struct {
 }
 
 // NewMaxLevelFormatting create new instance with max level
-func NewMaxLevelFormatting(maxLevel Level) *LevelFormatting {
-	lf := &LevelFormatting{}
-	lf.SetMaxLevel(maxLevel)
-	return lf
-}
+func NewMaxLevelFormatting(maxLevel Level) *LevelFormatting { _ = "STUB: not implemented"; return nil }
 
 // NewLevelsFormatting create new instance with levels
-func NewLevelsFormatting(levels []Level) *LevelFormatting {
-	lf := &LevelFormatting{}
-	lf.SetLimitLevels(levels)
-	return lf
-}
+func NewLevelsFormatting(levels []Level) *LevelFormatting { _ = "STUB: not implemented"; return nil }

@@ -1,12 +1,7 @@
 package slog
 
 import (
-	"crypto/md5"
-	"encoding/hex"
-	"os"
 	"runtime"
-
-	"github.com/gookit/goutil/strutil"
 )
 
 //
@@ -24,10 +19,12 @@ type ProcessorFunc func(record *Record)
 
 // Process record
 func (fn ProcessorFunc) Process(record *Record) {
-	fn(record)
+	_ = "STUB: not implemented"
+
+	// ProcessableHandler interface
+	return
 }
 
-// ProcessableHandler interface
 type ProcessableHandler interface {
 	// AddProcessor add a processor
 	AddProcessor(Processor)
@@ -41,16 +38,13 @@ type Processable struct {
 }
 
 // AddProcessor to the handler
-func (p *Processable) AddProcessor(processor Processor) {
-	p.processors = append(p.processors, processor)
-}
+func (p *Processable) AddProcessor(processor Processor) { _ = "STUB: not implemented"; return }
 
 // ProcessRecord process record
 func (p *Processable) ProcessRecord(r *Record) {
+	_ = "STUB: not implemented"
 	// processing log record
-	for _, processor := range p.processors {
-		processor.Process(r)
-	}
+	return
 }
 
 //
@@ -58,26 +52,10 @@ func (p *Processable) ProcessRecord(r *Record) {
 //
 
 // AddHostname to record
-func AddHostname() Processor {
-	hostname, _ := os.Hostname()
-	return ProcessorFunc(func(record *Record) {
-		record.AddField("hostname", hostname)
-	})
-}
+func AddHostname() Processor { _ = "STUB: not implemented"; return *new(Processor) }
 
 // AddUniqueID to record
-func AddUniqueID(fieldName string) Processor {
-	hs := md5.New()
-
-	return ProcessorFunc(func(record *Record) {
-		rb, _ := strutil.RandomBytes(32)
-		hs.Write(rb)
-		randomID := hex.EncodeToString(hs.Sum(nil))
-		hs.Reset()
-
-		record.AddField(fieldName, randomID)
-	})
-}
+func AddUniqueID(fieldName string) Processor { _ = "STUB: not implemented"; return *new(Processor) }
 
 // MemoryUsage get memory usage.
 var MemoryUsage ProcessorFunc = func(record *Record) {
@@ -87,42 +65,11 @@ var MemoryUsage ProcessorFunc = func(record *Record) {
 }
 
 // AppendCtxKeys append context keys to Record.Fields
-func AppendCtxKeys(keys ...string) Processor {
-	return ProcessorFunc(func(record *Record) {
-		if record.Ctx == nil {
-			return
-		}
-
-		for _, key := range keys {
-			if val := record.Ctx.Value(key); val != nil {
-				record.AddField(key, val)
-			}
-		}
-	})
-}
+func AppendCtxKeys(keys ...string) Processor { _ = "STUB: not implemented"; return *new(Processor) }
 
 // CtxKeysProcessor append context keys to Record.Data, Record.Fields, Record.Extra
-//  - dist: "data" | "fields" | "extra"
+//   - dist: "data" | "fields" | "extra"
 func CtxKeysProcessor(dist string, keys ...string) Processor {
-	return ProcessorFunc(func(r *Record) {
-		if r.Ctx == nil {
-			return
-		}
-
-		kvMap := map[string]any{}
-		for _, key := range keys {
-			if val := r.Ctx.Value(key); val != nil {
-				kvMap[key] = val
-			}
-		}
-
-		switch dist {
-		case "field", "fields":
-			r.AddFields(kvMap)
-		case "ext", "extra":
-			r.AddExtra(kvMap)
-		default:
-			r.AddData(kvMap)
-		}
-	})
+	_ = "STUB: not implemented"
+	return *new(Processor)
 }

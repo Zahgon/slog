@@ -1,12 +1,7 @@
 package rotatefile
 
 import (
-	"os"
-	"sort"
 	"time"
-
-	"github.com/gookit/goutil/errorx"
-	"github.com/gookit/goutil/fsutil"
 )
 
 const defaultCheckInterval = 60 * time.Second
@@ -54,43 +49,18 @@ type CConfig struct {
 type CConfigFunc func(c *CConfig)
 
 // AddDirPath for clean, will auto append * for match all files
-func (c *CConfig) AddDirPath(dirPaths ...string) *CConfig {
-	for _, dirPath := range dirPaths {
-		if !fsutil.IsDir(dirPath) {
-			continue
-		}
-		c.Patterns = append(c.Patterns, dirPath+"/*")
-	}
-	return c
-}
+func (c *CConfig) AddDirPath(dirPaths ...string) *CConfig { _ = "STUB: not implemented"; return nil }
 
 // AddPattern for clean. eg: "/tmp/error.log.*"
-func (c *CConfig) AddPattern(patterns ...string) *CConfig {
-	c.Patterns = append(c.Patterns, patterns...)
-	return c
-}
+func (c *CConfig) AddPattern(patterns ...string) *CConfig { _ = "STUB: not implemented"; return nil }
 
 // WithConfigFn for custom settings
-func (c *CConfig) WithConfigFn(fns ...CConfigFunc) *CConfig {
-	for _, fn := range fns {
-		if fn != nil {
-			fn(c)
-		}
-	}
-	return c
-}
+func (c *CConfig) WithConfigFn(fns ...CConfigFunc) *CConfig { _ = "STUB: not implemented"; return nil }
 
 // NewCConfig instance
-func NewCConfig() *CConfig {
-	return &CConfig{
-		BackupNum:  DefaultBackNum,
-		BackupTime: DefaultBackTime,
-		TimeClock:  DefaultTimeClockFn,
-		TimeUnit:   time.Hour,
-		// check interval time
-		CheckInterval: defaultCheckInterval,
-	}
-}
+func NewCConfig() *CConfig { _ = "STUB: not implemented"; return nil }
+
+// check interval time
 
 // FilesClear multi files by time.
 //
@@ -107,26 +77,22 @@ type FilesClear struct {
 }
 
 // NewFilesClear instance
-func NewFilesClear(fns ...CConfigFunc) *FilesClear {
-	cfg := NewCConfig().WithConfigFn(fns...)
-	return &FilesClear{cfg: cfg}
-}
+func NewFilesClear(fns ...CConfigFunc) *FilesClear { _ = "STUB: not implemented"; return nil }
 
 // Config get
 func (r *FilesClear) Config() *CConfig {
-	return r.cfg
+	_ = "STUB: not implemented"
+
+	// WithConfig for custom set config
+	return nil
 }
 
-// WithConfig for custom set config
-func (r *FilesClear) WithConfig(cfg *CConfig) *FilesClear {
-	r.cfg = cfg
-	return r
-}
+func (r *FilesClear) WithConfig(cfg *CConfig) *FilesClear { _ = "STUB: not implemented"; return nil }
 
 // WithConfigFn for custom settings
 func (r *FilesClear) WithConfigFn(fns ...CConfigFunc) *FilesClear {
-	r.cfg.WithConfigFn(fns...)
-	return r
+	_ = "STUB: not implemented"
+	return nil
 }
 
 //
@@ -136,12 +102,7 @@ func (r *FilesClear) WithConfigFn(fns ...CConfigFunc) *FilesClear {
 //
 
 // StopDaemon for stop daemon clean
-func (r *FilesClear) StopDaemon() {
-	if r.quitDaemon == nil {
-		panic("cannot quit daemon, please call DaemonClean() first")
-	}
-	close(r.quitDaemon)
-}
+func (r *FilesClear) StopDaemon() { _ = "STUB: not implemented"; return }
 
 // DaemonClean daemon clean old files by config
 //
@@ -164,107 +125,36 @@ func (r *FilesClear) StopDaemon() {
 //
 //	// wait for stop
 //	wg.Wait()
-func (r *FilesClear) DaemonClean(onStop func()) {
-	if r.cfg.BackupNum == 0 && r.cfg.BackupTime == 0 {
-		panic("clean: backupNum and backupTime are both 0")
-	}
+func (r *FilesClear) DaemonClean(onStop func()) { _ = "STUB: not implemented"; return }
 
-	r.quitDaemon = make(chan struct{})
-	tk := time.NewTicker(r.cfg.CheckInterval)
-	defer tk.Stop()
-
-	for {
-		select {
-		case <-r.quitDaemon:
-			if onStop != nil {
-				onStop()
-			}
-			return
-		case <-tk.C: // do cleaning
-			printErrln("files-clear: cleanup old files error:", r.Clean())
-		}
-	}
-}
+// do cleaning
 
 // Clean old files by config
-func (r *FilesClear) prepare() {
-	if r.inited {
-		return
-	}
-	r.inited = true
+func (r *FilesClear) prepare() { _ = "STUB: not implemented"; return }
 
-	// check backup time
-	if r.cfg.BackupTime > 0 {
-		r.backupDur = time.Duration(r.cfg.BackupTime) * r.cfg.TimeUnit
-	}
-}
+// check backup time
 
 // Clean old files by config
-func (r *FilesClear) Clean() error {
-	if r.cfg.BackupNum == 0 && r.cfg.BackupTime == 0 {
-		return errorx.Err("clean: backupNum and backupTime are both 0")
-	}
+func (r *FilesClear) Clean() error { _ = "STUB: not implemented"; return nil }
 
-	// clear by time, can also clean by number
-	for _, filePattern := range r.cfg.Patterns {
-		if err := r.cleanByPattern(filePattern); err != nil {
-			return err
-		}
-	}
-	return nil
-}
+// clear by time, can also clean by number
 
 // CleanByPattern clean files by pattern
 func (r *FilesClear) cleanByPattern(filePattern string) (err error) {
-	r.prepare()
-
-	oldFiles := make([]fileInfo, 0, 8)
-	cutTime := r.cfg.TimeClock.Now().Add(-r.backupDur)
-
-	// find and clean expired files
-	err = fsutil.GlobWithFunc(filePattern, func(filePath string) error {
-		stat, err := os.Stat(filePath)
-		if err != nil {
-			return err
-		}
-
-		// not handle subdir TODO: support subdir
-		if stat.IsDir() {
-			return nil
-		}
-
-		// collect not expired
-		if stat.ModTime().After(cutTime) {
-			oldFiles = append(oldFiles, newFileInfo(filePath, stat))
-			return nil
-		}
-
-		// remove expired file
-		return r.remove(filePath)
-	})
-
-	// clear by backup number.
-	backNum := int(r.cfg.BackupNum)
-	remNum := len(oldFiles) - backNum
-
-	if backNum > 0 && remNum > 0 {
-		// sort by mod-time, oldest at first.
-		sort.Sort(modTimeFInfos(oldFiles))
-
-		for idx := 0; idx < len(oldFiles); idx++ {
-			if err = r.remove(oldFiles[idx].Path()); err != nil {
-				break
-			}
-
-			remNum--
-			if remNum == 0 {
-				break
-			}
-		}
-	}
-	return
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (r *FilesClear) remove(filePath string) (err error) {
-	return os.Remove(filePath)
-}
+// find and clean expired files
+
+// not handle subdir TODO: support subdir
+
+// collect not expired
+
+// remove expired file
+
+// clear by backup number.
+
+// sort by mod-time, oldest at first.
+
+func (r *FilesClear) remove(filePath string) (err error) { _ = "STUB: not implemented"; return nil }

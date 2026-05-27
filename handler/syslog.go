@@ -28,62 +28,24 @@ type SysLogHandler struct {
 
 // NewSysLogHandler instance
 func NewSysLogHandler(priority syslog.Priority, tag string) (*SysLogHandler, error) {
-	return NewSysLog(&SysLogOpt{
-		Priority: priority,
-		Tag:      tag,
-	})
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // NewSysLog handler instance with all custom options.
-func NewSysLog(opt *SysLogOpt) (*SysLogHandler, error) {
-	slWriter, err := syslog.Dial(opt.Network, opt.Raddr, opt.Priority, opt.Tag)
-	if err != nil {
-		return nil, err
-	}
+func NewSysLog(opt *SysLogOpt) (*SysLogHandler, error) { _ = "STUB: not implemented"; return nil, nil }
 
-	h := &SysLogHandler{
-		writer: slWriter,
-	}
-
-	// init default log level
-	h.Level = slog.InfoLevel
-	return h, nil
-}
+// init default log level
 
 // Handle a log record
-func (h *SysLogHandler) Handle(record *slog.Record) error {
-	bts, err := h.Formatter().Format(record)
-	if err != nil {
-		return err
-	}
+func (h *SysLogHandler) Handle(record *slog.Record) error { _ = "STUB: not implemented"; return nil }
 
-	s := string(bts)
+// write log by level
 
-	// write log by level
-	switch record.Level {
-	case slog.DebugLevel, slog.TraceLevel:
-		return h.writer.Debug(s)
-	case slog.NoticeLevel:
-		return h.writer.Notice(s)
-	case slog.WarnLevel:
-		return h.writer.Warning(s)
-	case slog.ErrorLevel:
-		return h.writer.Err(s)
-	case slog.FatalLevel:
-		return h.writer.Crit(s)
-	case slog.PanicLevel:
-		return h.writer.Emerg(s)
-	default: // as info level
-		return h.writer.Info(s)
-	}
-}
+// as info level
 
 // Close handler
-func (h *SysLogHandler) Close() error {
-	return h.writer.Close()
-}
+func (h *SysLogHandler) Close() error { _ = "STUB: not implemented"; return nil }
 
 // Flush handler
-func (h *SysLogHandler) Flush() error {
-	return nil
-}
+func (h *SysLogHandler) Flush() error { _ = "STUB: not implemented"; return nil }

@@ -17,10 +17,12 @@ type FormatterFunc func(r *Record) ([]byte, error)
 
 // Format a log record
 func (fn FormatterFunc) Format(r *Record) ([]byte, error) {
-	return fn(r)
+	_ = "STUB: not implemented"
+
+	// Formattable interface
+	return nil, nil
 }
 
-// Formattable interface
 type Formattable interface {
 	// Formatter get the log formatter
 	Formatter() Formatter
@@ -40,38 +42,22 @@ type FormatterWrapper struct {
 }
 
 // Formatter get formatter. if not set, will return TextFormatter
-func (f *FormatterWrapper) Formatter() Formatter {
-	if f.formatter == nil {
-		f.formatter = NewTextFormatter()
-	}
-	return f.formatter
-}
+func (f *FormatterWrapper) Formatter() Formatter { _ = "STUB: not implemented"; return *new(Formatter) }
 
 // SetFormatter to handler
-func (f *FormatterWrapper) SetFormatter(formatter Formatter) {
-	f.formatter = formatter
-}
+func (f *FormatterWrapper) SetFormatter(formatter Formatter) { _ = "STUB: not implemented"; return }
 
 // Format log record to bytes
 func (f *FormatterWrapper) Format(record *Record) ([]byte, error) {
-	return f.Formatter().Format(record)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // CallerFormatFn caller format func
 type CallerFormatFn func(rf *runtime.Frame) (cs string)
 
 // AsTextFormatter util func
-func AsTextFormatter(f Formatter) *TextFormatter {
-	if tf, ok := f.(*TextFormatter); ok {
-		return tf
-	}
-	panic("slog: cannot cast input as *TextFormatter")
-}
+func AsTextFormatter(f Formatter) *TextFormatter { _ = "STUB: not implemented"; return nil }
 
 // AsJSONFormatter util func
-func AsJSONFormatter(f Formatter) *JSONFormatter {
-	if jf, ok := f.(*JSONFormatter); ok {
-		return jf
-	}
-	panic("slog: cannot cast input as *JSONFormatter")
-}
+func AsJSONFormatter(f Formatter) *JSONFormatter { _ = "STUB: not implemented"; return nil }

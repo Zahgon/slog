@@ -2,9 +2,6 @@ package slog
 
 import (
 	"io"
-	"os"
-
-	"github.com/gookit/color"
 )
 
 // SugaredLoggerFn func type.
@@ -25,115 +22,63 @@ type SugaredLogger struct {
 }
 
 // NewStd logger instance, alias of NewStdLogger()
-func NewStd(fns ...SugaredLoggerFn) *SugaredLogger {
-	return NewStdLogger(fns...)
-}
+func NewStd(fns ...SugaredLoggerFn) *SugaredLogger { _ = "STUB: not implemented"; return nil }
 
 // NewStdLogger instance
-func NewStdLogger(fns ...SugaredLoggerFn) *SugaredLogger {
-	setFns := []SugaredLoggerFn{
-		func(sl *SugaredLogger) {
-			sl.SetName("stdLogger")
-			// sl.CallerSkip += 1
-			sl.ReportCaller = true
-			// auto enable console color
-			sl.Formatter.(*TextFormatter).EnableColor = color.SupportColor()
-		},
-	}
+func NewStdLogger(fns ...SugaredLoggerFn) *SugaredLogger { _ = "STUB: not implemented"; return nil }
 
-	if len(fns) > 0 {
-		setFns = append(setFns, fns...)
-	}
-	return NewSugaredLogger(os.Stdout, DebugLevel, setFns...)
-}
+// sl.CallerSkip += 1
+
+// auto enable console color
 
 // NewSugared create new SugaredLogger. alias of NewSugaredLogger()
 func NewSugared(out io.Writer, level Level, fns ...SugaredLoggerFn) *SugaredLogger {
-	return NewSugaredLogger(out, level, fns...)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // NewSugaredLogger create new SugaredLogger
 func NewSugaredLogger(output io.Writer, level Level, fns ...SugaredLoggerFn) *SugaredLogger {
-	sl := &SugaredLogger{
-		Level:  level,
-		Output: output,
-		Logger: New(),
-		// default value
-		Formatter: NewTextFormatter(),
-	}
-
-	// NOTICE: use self as a log handler
-	sl.AddHandler(sl)
-	return sl.Config(fns...)
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// default value
+
+// NOTICE: use self as a log handler
 
 // NewJSONSugared create new SugaredLogger with JSONFormatter
 func NewJSONSugared(out io.Writer, level Level, fns ...SugaredLoggerFn) *SugaredLogger {
-	sl := NewSugaredLogger(out, level)
-	sl.Formatter = NewJSONFormatter()
-
-	return sl.Config(fns...)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Config current logger
 func (sl *SugaredLogger) Config(fns ...SugaredLoggerFn) *SugaredLogger {
-	for _, fn := range fns {
-		fn(sl)
-	}
-	return sl
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Reset the logger
-func (sl *SugaredLogger) Reset() {
-	sl.Level = DebugLevel
-	sl.Output = os.Stdout
-	sl.Formatter = NewTextFormatter()
-}
+func (sl *SugaredLogger) Reset() { _ = "STUB: not implemented"; return }
 
 // IsHandling Check if the current level can be handling
-func (sl *SugaredLogger) IsHandling(level Level) bool {
-	return sl.Level.ShouldHandling(level)
-}
+func (sl *SugaredLogger) IsHandling(level Level) bool { _ = "STUB: not implemented"; return false }
 
 // Handle log record
-func (sl *SugaredLogger) Handle(record *Record) error {
-	bts, err := sl.Formatter.Format(record)
-	if err != nil {
-		return err
-	}
-
-	_, err = sl.Output.Write(bts)
-	return err
-}
+func (sl *SugaredLogger) Handle(record *Record) error { _ = "STUB: not implemented"; return nil }
 
 // Close all log handlers, will flush and close all handlers.
 //
 // IMPORTANT:
 //
 //	if enable async/buffer mode, please call the Close() before exit.
-func (sl *SugaredLogger) Close() error {
-	_ = sl.Logger.VisitAll(func(handler Handler) error {
-		// TIP: must exclude self, because self is a handler
-		if _, ok := handler.(*SugaredLogger); !ok {
-			if err := handler.Close(); err != nil {
-				sl.err = err
-			}
-		}
-		return nil
-	})
+func (sl *SugaredLogger) Close() error { _ = "STUB: not implemented"; return nil }
 
-	return sl.err
-}
+// TIP: must exclude self, because self is a handler
 
 // Flush all logs. alias of the FlushAll()
-func (sl *SugaredLogger) Flush() error { return sl.FlushAll() }
+func (sl *SugaredLogger) Flush() error { _ = "STUB: not implemented"; return nil }
 
 // FlushAll all logs
-func (sl *SugaredLogger) FlushAll() error {
-	return sl.Logger.VisitAll(func(handler Handler) error {
-		if _, ok := handler.(*SugaredLogger); !ok {
-			_ = handler.Flush()
-		}
-		return nil
-	})
-}
+func (sl *SugaredLogger) FlushAll() error { _ = "STUB: not implemented"; return nil }

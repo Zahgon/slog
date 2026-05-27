@@ -20,151 +20,71 @@ type Builder struct {
 }
 
 // NewBuilder create
-func NewBuilder() *Builder {
-	return &Builder{
-		Config: NewEmptyConfig(),
-	}
-}
+func NewBuilder() *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithOutput to the builder
-func (b *Builder) WithOutput(w io.Writer) *Builder {
-	b.Output = w
-	return b
-}
+func (b *Builder) WithOutput(w io.Writer) *Builder { _ = "STUB: not implemented"; return nil }
 
 // With some config fn
 //
 // Deprecated: please use WithConfigFn()
-func (b *Builder) With(fns ...ConfigFn) *Builder {
-	return b.WithConfigFn(fns...)
-}
+func (b *Builder) With(fns ...ConfigFn) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithConfigFn some config fn
-func (b *Builder) WithConfigFn(fns ...ConfigFn) *Builder {
-	b.Config.With(fns...)
-	return b
-}
+func (b *Builder) WithConfigFn(fns ...ConfigFn) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithLogfile setting
-func (b *Builder) WithLogfile(logfile string) *Builder {
-	b.Logfile = logfile
-	return b
-}
+func (b *Builder) WithLogfile(logfile string) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithLevelMode setting
 func (b *Builder) WithLevelMode(mode slog.LevelMode) *Builder {
-	b.LevelMode = mode
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithLogLevel setting max log level
-func (b *Builder) WithLogLevel(level slog.Level) *Builder {
-	b.Level = level
-	b.LevelMode = slog.LevelModeMax
-	return b
-}
+func (b *Builder) WithLogLevel(level slog.Level) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithLogLevels setting
 func (b *Builder) WithLogLevels(levels []slog.Level) *Builder {
-	b.Levels = levels
-	b.LevelMode = slog.LevelModeList
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithBuffMode setting
-func (b *Builder) WithBuffMode(bufMode string) *Builder {
-	b.BuffMode = bufMode
-	return b
-}
+func (b *Builder) WithBuffMode(bufMode string) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithBuffSize setting
-func (b *Builder) WithBuffSize(bufSize int) *Builder {
-	b.BuffSize = bufSize
-	return b
-}
+func (b *Builder) WithBuffSize(bufSize int) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithMaxSize setting
-func (b *Builder) WithMaxSize(maxSize uint64) *Builder {
-	b.MaxSize = maxSize
-	return b
-}
+func (b *Builder) WithMaxSize(maxSize uint64) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithRotateTime setting
 func (b *Builder) WithRotateTime(rt rotatefile.RotateTime) *Builder {
-	b.RotateTime = rt
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithCompress setting
-func (b *Builder) WithCompress(compress bool) *Builder {
-	b.Compress = compress
-	return b
-}
+func (b *Builder) WithCompress(compress bool) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithUseJSON setting
-func (b *Builder) WithUseJSON(useJSON bool) *Builder {
-	b.UseJSON = useJSON
-	return b
-}
+func (b *Builder) WithUseJSON(useJSON bool) *Builder { _ = "STUB: not implemented"; return nil }
 
 // Build slog handler.
 func (b *Builder) Build() slog.FormattableHandler {
-	if b.Output != nil {
-		return b.buildFromWriter(b.Output)
-	}
-
-	if b.Logfile != "" {
-		w, err := b.CreateWriter()
-		if err != nil {
-			panic(err)
-		}
-		return b.buildFromWriter(w)
-	}
-
-	panic("slog: missing information for build slog handler")
+	_ = "STUB: not implemented"
+	return *new(slog.FormattableHandler)
 }
 
 // Build slog handler.
 func (b *Builder) buildFromWriter(w io.Writer) (h slog.FormattableHandler) {
-	defer b.reset()
-	bufSize := b.BuffSize
-	lf := b.newLevelFormattable()
-
-	if scw, ok := w.(SyncCloseWriter); ok {
-		if bufSize > 0 {
-			scw = b.wrapBuffer(scw)
-		}
-
-		h = NewSyncCloserWithLF(scw, lf)
-	} else if fcw, ok := w.(FlushCloseWriter); ok {
-		if bufSize > 0 {
-			fcw = b.wrapBuffer(fcw)
-		}
-
-		h = NewFlushCloserWithLF(fcw, lf)
-	} else if wc, ok := w.(io.WriteCloser); ok {
-		if bufSize > 0 {
-			wc = b.wrapBuffer(wc)
-		}
-
-		h = NewWriteCloserWithLF(wc, lf)
-	} else {
-		if bufSize > 0 {
-			w = b.wrapBuffer(w)
-		}
-
-		h = NewIOWriterWithLF(w, lf)
-	}
-
-	// use json format.
-	if b.UseJSON {
-		h.SetFormatter(slog.NewJSONFormatter())
-	}
-	return
+	_ = "STUB: not implemented"
+	return *new(slog.FormattableHandler)
 }
+
+// use json format.
 
 // rest builder.
-func (b *Builder) reset() {
-	b.Output = nil
-	b.Config = NewEmptyConfig()
-}
+func (b *Builder) reset() { _ = "STUB: not implemented"; return }

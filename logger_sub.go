@@ -27,58 +27,34 @@ type SubLogger struct {
 }
 
 // NewSubWith returns a new SubLogger with parent logger.
-func NewSubWith(l *Logger) *SubLogger { return &SubLogger{l: l} }
+func NewSubWith(l *Logger) *SubLogger { _ = "STUB: not implemented"; return nil }
 
 // KeepCtx keep context for all log records
 func (sub *SubLogger) KeepCtx(ctx context.Context) *SubLogger {
-	sub.Ctx = ctx
-	return sub
+	_ = "STUB: not implemented"
+	return nil
+
+	// KeepFields keep custom fields data for all log records
 }
 
-// KeepFields keep custom fields data for all log records
-func (sub *SubLogger) KeepFields(fields M) *SubLogger {
-	sub.Fields = fields
-	return sub
-}
+func (sub *SubLogger) KeepFields(fields M) *SubLogger { _ = "STUB: not implemented"; return nil }
 
 // KeepField keep custom field for all log records
 func (sub *SubLogger) KeepField(field string, value any) *SubLogger {
-	if sub.Fields == nil {
-		sub.Fields = make(M)
-	}
-
-	sub.Fields[field] = value
-	return sub
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // KeepData keep data for all log records
-func (sub *SubLogger) KeepData(data M) *SubLogger {
-	sub.Data = data
-	return sub
-}
+func (sub *SubLogger) KeepData(data M) *SubLogger { _ = "STUB: not implemented"; return nil }
 
 // KeepExtra keep extra data for all log records
-func (sub *SubLogger) KeepExtra(extra M) *SubLogger {
-	sub.Extra = extra
-	return sub
-}
+func (sub *SubLogger) KeepExtra(extra M) *SubLogger { _ = "STUB: not implemented"; return nil }
 
 // Release releases the SubLogger.
-func (sub *SubLogger) Release() {
-	sub.l = nil
-	sub.Ctx = nil
-	sub.Fields = nil
-	sub.Data = nil
-	sub.Extra = nil
-}
+func (sub *SubLogger) Release() { _ = "STUB: not implemented"; return }
 
-func (sub *SubLogger) withKeepCtx() *Record {
-	r := sub.l.WithContext(sub.Ctx)
-	r.Data = sub.Data
-	r.Extra = sub.Extra
-	r.Fields = sub.Fields
-	return r
-}
+func (sub *SubLogger) withKeepCtx() *Record { _ = "STUB: not implemented"; return nil }
 
 //
 // ---------------------------------------------------------------------------
@@ -87,71 +63,55 @@ func (sub *SubLogger) withKeepCtx() *Record {
 //
 
 // Print logs a message at PrintLevel. will with sub logger's context, fields and data
-func (sub *SubLogger) Print(args ...any) { sub.withKeepCtx().Print(args...) }
+func (sub *SubLogger) Print(args ...any) { _ = "STUB: not implemented"; return }
 
 // Printf logs a message at PrintLevel. will with sub logger's context, fields and data
-func (sub *SubLogger) Printf(format string, args ...any) { sub.withKeepCtx().Printf(format, args...) }
+func (sub *SubLogger) Printf(format string, args ...any) { _ = "STUB: not implemented"; return }
 
 // Trace logs a message at TraceLevel. will with sub logger's context, fields and data
-func (sub *SubLogger) Trace(args ...any) { sub.withKeepCtx().Trace(args...) }
+func (sub *SubLogger) Trace(args ...any) { _ = "STUB: not implemented"; return }
 
 // Tracef logs a formatted message at TraceLevel. will with sub logger's context, fields and data
-func (sub *SubLogger) Tracef(format string, args ...any) {
-	sub.withKeepCtx().Tracef(format, args...)
-}
+func (sub *SubLogger) Tracef(format string, args ...any) { _ = "STUB: not implemented"; return }
 
 // Debug logs a message at DebugLevel. will with sub logger's context, fields and data
-func (sub *SubLogger) Debug(args ...any) { sub.withKeepCtx().Debug(args...) }
+func (sub *SubLogger) Debug(args ...any) { _ = "STUB: not implemented"; return }
 
 // Debugf logs a formatted message at DebugLevel. will with sub logger's context, fields and data
-func (sub *SubLogger) Debugf(format string, args ...any) {
-	sub.withKeepCtx().Debugf(format, args...)
-}
+func (sub *SubLogger) Debugf(format string, args ...any) { _ = "STUB: not implemented"; return }
 
 // Info logs a message at InfoLevel. will with sub logger's context, fields and data
-func (sub *SubLogger) Info(args ...any) { sub.withKeepCtx().Info(args...) }
+func (sub *SubLogger) Info(args ...any) { _ = "STUB: not implemented"; return }
 
 // Infof logs a formatted message at InfoLevel. will with sub logger's context, fields and data
-func (sub *SubLogger) Infof(format string, args ...any) {
-	sub.withKeepCtx().Infof(format, args...)
-}
+func (sub *SubLogger) Infof(format string, args ...any) { _ = "STUB: not implemented"; return }
 
 // Notice logs a message at NoticeLevel. will with sub logger's context, fields and data
-func (sub *SubLogger) Notice(args ...any) { sub.withKeepCtx().Notice(args...) }
+func (sub *SubLogger) Notice(args ...any) { _ = "STUB: not implemented"; return }
 
 // Noticef logs a formatted message at NoticeLevel. will with sub logger's context, fields and data
-func (sub *SubLogger) Noticef(format string, args ...any) {
-	sub.withKeepCtx().Noticef(format, args...)
-}
+func (sub *SubLogger) Noticef(format string, args ...any) { _ = "STUB: not implemented"; return }
 
 // Warn logs a message at WarnLevel. will with sub logger's context, fields and data
-func (sub *SubLogger) Warn(args ...any) { sub.withKeepCtx().Warn(args...) }
+func (sub *SubLogger) Warn(args ...any) { _ = "STUB: not implemented"; return }
 
 // Warnf logs a formatted message at WarnLevel. will with sub logger's context, fields and data
-func (sub *SubLogger) Warnf(format string, args ...any) {
-	sub.withKeepCtx().Warnf(format, args...)
-}
+func (sub *SubLogger) Warnf(format string, args ...any) { _ = "STUB: not implemented"; return }
 
 // Error logs a message at ErrorLevel. will with sub logger's context, fields and data
-func (sub *SubLogger) Error(args ...any) { sub.withKeepCtx().Error(args...) }
+func (sub *SubLogger) Error(args ...any) { _ = "STUB: not implemented"; return }
 
 // Errorf logs a formatted message at ErrorLevel. will with sub logger's context, fields and data
-func (sub *SubLogger) Errorf(format string, args ...any) {
-	sub.withKeepCtx().Errorf(format, args...)
-}
+func (sub *SubLogger) Errorf(format string, args ...any) { _ = "STUB: not implemented"; return }
 
 // Fatal logs a message at FatalLevel. will with sub logger's context, fields and data
-func (sub *SubLogger) Fatal(args ...any) { sub.withKeepCtx().Fatal(args...) }
+func (sub *SubLogger) Fatal(args ...any) { _ = "STUB: not implemented"; return }
 
 // Fatalf logs a formatted message at FatalLevel. will with sub logger's context, fields and data
-func (sub *SubLogger) Fatalf(format string, args ...any) {
-	sub.withKeepCtx().Fatalf(format, args...)
-}
+func (sub *SubLogger) Fatalf(format string, args ...any) { _ = "STUB: not implemented"; return }
 
 // Panic logs a message at PanicLevel. will with sub logger's context, fields and data
-func (sub *SubLogger) Panic(args ...any) { sub.withKeepCtx().Panic(args...) }
+func (sub *SubLogger) Panic(args ...any) { _ = "STUB: not implemented"; return }
 
 // Panicf logs a formatted message at PanicLevel. will with sub logger's context, fields and data
-func (sub *SubLogger) Panicf(format string, args ...any) {
-	sub.withKeepCtx().Panicf(format, args...)
-}
+func (sub *SubLogger) Panicf(format string, args ...any) { _ = "STUB: not implemented"; return }

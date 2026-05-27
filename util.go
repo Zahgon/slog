@@ -1,15 +1,8 @@
 package slog
 
 import (
-	"fmt"
-	"os"
-	"path/filepath"
 	"runtime"
-	"strconv"
-	"strings"
 
-	"github.com/gookit/goutil/byteutil"
-	"github.com/gookit/goutil/strutil"
 	"github.com/valyala/bytebufferpool"
 )
 
@@ -25,153 +18,51 @@ import (
 
 // FormatLevelName Format the level name, specify the length returned,
 // fill the space with less length, and truncate than the length
-func FormatLevelName(name string, length int) string {
-	if len(name) < length {
-		return fmt.Sprintf("%-"+strconv.Itoa(length)+"s", name)
-	}
-	return name[:length]
-}
+func FormatLevelName(name string, length int) string { _ = "STUB: not implemented"; return "" }
 
-func buildLowerLevelName() map[Level]string {
-	mp := make(map[Level]string, len(LevelNames))
-	for level, s := range LevelNames {
-		mp[level] = strings.ToLower(s)
-	}
-	return mp
-}
+func buildLowerLevelName() map[Level]string { _ = "STUB: not implemented"; return nil }
 
 // getCaller retrieves the name of the first non-slog calling function
 func getCaller(callerSkip int) (fr runtime.Frame, ok bool) {
-	pcs := make([]uintptr, 1) // alloc 1 times
-	num := runtime.Callers(callerSkip, pcs)
-	if num > 0 {
-		fr, _ = runtime.CallersFrames(pcs).Next()
-		ok = fr.PC != 0
-	}
-	return
+	_ = "STUB: not implemented"
+	return *
+	// alloc 1 times
+	new(runtime.Frame), false
 }
 
 func formatCaller(rf *runtime.Frame, flag uint8, userFn CallerFormatFn) (cs string) {
-	if userFn != nil {
-		return userFn(rf)
-	}
-
-	lineNum := strconv.FormatInt(int64(rf.Line), 10)
-	switch flag {
-	case CallerFlagFull:
-		return rf.Function + "," + filepath.Base(rf.File) + ":" + lineNum
-	case CallerFlagFunc:
-		return rf.Function
-	case CallerFlagFcLine:
-		return rf.Function + ":" + lineNum
-	case CallerFlagPkg:
-		i := strings.LastIndex(rf.Function, "/")
-		i += strings.IndexByte(rf.Function[i+1:], '.')
-		return rf.Function[:i+1]
-	case CallerFlagPkgFnl:
-		i := strings.LastIndex(rf.Function, "/")
-		i += strings.IndexByte(rf.Function[i+1:], '.')
-		return rf.Function[:i+1] + "," + filepath.Base(rf.File) + ":" + lineNum
-	case CallerFlagFnlFcn:
-		ss := strings.Split(rf.Function, ".")
-		return filepath.Base(rf.File) + ":" + lineNum + "," + ss[len(ss)-1]
-	case CallerFlagFnLine:
-		return filepath.Base(rf.File) + ":" + lineNum
-	case CallerFlagFcName:
-		ss := strings.Split(rf.Function, ".")
-		return ss[len(ss)-1]
-	default: // CallerFlagFpLine
-		return rf.File + ":" + lineNum
-	}
+	_ = "STUB: not implemented"
+	return ""
 }
+
+// CallerFlagFpLine
 
 var msgBufPool bytebufferpool.Pool
 
 // it like Println, will add spaces for each argument
-func formatArgsWithSpaces(vs []any) string {
-	ln := len(vs)
-	if ln == 0 {
-		return ""
-	}
+func formatArgsWithSpaces(vs []any) string { _ = "STUB: not implemented"; return "" }
 
-	if ln == 1 {
-		// cast is string, return it. NOT ALLOC MEMORY
-		if str, ok := vs[0].(string); ok {
-			return str
-		}
-		return strutil.SafeString(vs[0])
-	}
+// cast is string, return it. NOT ALLOC MEMORY
 
-	// buf = make([]byte, 0, ln*8)
-	bb := msgBufPool.Get()
-	defer msgBufPool.Put(bb)
+// buf = make([]byte, 0, ln*8)
 
-	// TIP:
-	// `float` to string - will alloc 2 times memory
-	// `int <0`, `int > 100` to string -  will alloc 1 times memory
-	for i := range vs {
-		if i > 0 { // add space
-			bb.B = append(bb.B, ' ')
-		}
-		bb.B = byteutil.AppendAny(bb.B, vs[i])
-	}
+// TIP:
+// `float` to string - will alloc 2 times memory
+// `int <0`, `int > 100` to string -  will alloc 1 times memory
 
-	return string(bb.B)
-	// return byteutil.String(bb.B) // perf: Reduce one memory allocation
-}
+// add space
+
+// return byteutil.String(bb.B) // perf: Reduce one memory allocation
 
 // EncodeToString data to string
-func EncodeToString(v any) string {
-	if mp, ok := v.(map[string]any); ok {
-		return mapToString(mp)
-	}
-	return strutil.SafeString(v)
-}
+func EncodeToString(v any) string { _ = "STUB: not implemented"; return "" }
 
-func mapToString(mp map[string]any) string {
-	ln := len(mp)
-	if ln == 0 {
-		return "{}"
-	}
+func mapToString(mp map[string]any) string { _ = "STUB: not implemented"; return "" }
 
-	// TODO use bytebufferpool
-	buf := make([]byte, 0, ln*8)
-	buf = append(buf, '{')
+// TODO use bytebufferpool
 
-	for k, val := range mp {
-		buf = append(buf, k...)
-		buf = append(buf, ':')
+// remove last ', '
 
-		str, _ := strutil.AnyToString(val, false)
-		buf = append(buf, str...)
-		buf = append(buf, ',', ' ')
-	}
+func parseTemplateToFields(tplStr string) []string { _ = "STUB: not implemented"; return nil }
 
-	// remove last ', '
-	buf = append(buf[:len(buf)-2], '}')
-	return strutil.Byte2str(buf)
-}
-
-func parseTemplateToFields(tplStr string) []string {
-	ss := strings.Split(tplStr, "{{")
-
-	vars := make([]string, 0, len(ss)*2)
-	for _, s := range ss {
-		if len(s) == 0 {
-			continue
-		}
-
-		fieldAndOther := strings.SplitN(s, "}}", 2)
-		if len(fieldAndOther) < 2 {
-			vars = append(vars, s)
-		} else {
-			vars = append(vars, fieldAndOther[0], "}}"+fieldAndOther[1])
-		}
-	}
-
-	return vars
-}
-
-func printStderr(args ...any) {
-	_, _ = fmt.Fprintln(os.Stderr, args...)
-}
+func printStderr(args ...any) { _ = "STUB: not implemented"; return }

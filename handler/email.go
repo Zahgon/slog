@@ -1,9 +1,6 @@
 package handler
 
 import (
-	"net/smtp"
-	"strconv"
-
 	"github.com/gookit/slog"
 )
 
@@ -27,26 +24,13 @@ type EmailHandler struct {
 
 // NewEmailHandler instance
 func NewEmailHandler(from EmailOption, toAddresses []string) *EmailHandler {
-	h := &EmailHandler{
-		From: from,
-		// to receivers
-		ToAddresses: toAddresses,
-	}
-
-	// init default log level
-	h.Level = slog.InfoLevel
-	return h
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// to receivers
+
+// init default log level
 
 // Handle a log record
-func (h *EmailHandler) Handle(r *slog.Record) error {
-	msgBytes, err := h.Format(r)
-	if err != nil {
-		return err
-	}
-
-	var auth = smtp.PlainAuth("", h.From.FromAddr, h.From.Password, h.From.SMTPHost)
-	addr := h.From.SMTPHost + ":" + strconv.Itoa(h.From.SMTPPort)
-
-	return smtp.SendMail(addr, auth, h.From.FromAddr, h.ToAddresses, msgBytes)
-}
+func (h *EmailHandler) Handle(r *slog.Record) error { _ = "STUB: not implemented"; return nil }

@@ -1,9 +1,6 @@
 package main
 
 import (
-	"errors"
-
-	"github.com/gookit/goutil/errorx"
 	"github.com/gookit/slog"
 	"github.com/gookit/slog/handler"
 )
@@ -18,17 +15,4 @@ func main() {
 	printAllLevel(l, "this is a", "log", "message")
 }
 
-func printAllLevel(l *slog.Logger, args ...any) {
-	l.Debug(args...)
-	l.Info(args...)
-	l.Warn(args...)
-	l.Error(args...)
-	l.Print(args...)
-	l.Fatal(args...)
-	l.Panic(args...)
-
-	l.Trace(args...)
-	l.Notice(args...)
-	l.ErrorT(errors.New("a error object"))
-	l.ErrorT(errorx.New("error with stack info"))
-}
+func printAllLevel(l *slog.Logger, args ...any) { _ = "STUB: not implemented"; return }

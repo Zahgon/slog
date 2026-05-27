@@ -1,13 +1,9 @@
 package slog
 
 import (
-	"errors"
-	"strconv"
-	"strings"
 	"time"
 
 	"github.com/gookit/goutil/envutil"
-	"github.com/gookit/goutil/strutil"
 	"github.com/gookit/gsr"
 )
 
@@ -29,52 +25,36 @@ type LoggerFn func(l *Logger)
 type Level uint32
 
 // String get level name
-func (l Level) String() string { return LevelName(l) }
+func (l Level) String() string {
+	_ = "STUB: not implemented"
 
-// Name get level name. eg: INFO, DEBUG ...
-func (l Level) Name() string { return LevelName(l) }
-
-// LowerName get lower level name. eg: info, debug ...
-func (l Level) LowerName() string {
-	if n, ok := lowerLevelNames[l]; ok {
-		return n
-	}
-	return "unknown"
+	// Name get level name. eg: INFO, DEBUG ...
+	return ""
 }
+
+func (l Level) Name() string {
+	_ = "STUB: not implemented"
+
+	// LowerName get lower level name. eg: info, debug ...
+	return ""
+}
+
+func (l Level) LowerName() string { _ = "STUB: not implemented"; return "" }
 
 // ShouldHandling compare level, if current level <= l, it will be record.
-func (l Level) ShouldHandling(curLevel Level) bool {
-	return curLevel <= l
-}
+func (l Level) ShouldHandling(curLevel Level) bool { _ = "STUB: not implemented"; return false }
 
 // MarshalJSON implement the JSON Marshal interface [encoding/json.Marshaler]
-func (l Level) MarshalJSON() ([]byte, error) {
-	return []byte(`"` + l.String() + `"`), nil
-}
+func (l Level) MarshalJSON() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // UnmarshalJSON implement the JSON Unmarshal interface [encoding/json.Unmarshaler]
-func (l *Level) UnmarshalJSON(data []byte) error {
-	s, err := strconv.Unquote(string(data))
-	if err != nil {
-		return err
-	}
-
-	*l, err = StringToLevel(s)
-	return err
-}
+func (l *Level) UnmarshalJSON(data []byte) error { _ = "STUB: not implemented"; return nil }
 
 // Levels level list
 type Levels []Level
 
 // Contains given level
-func (ls Levels) Contains(level Level) bool {
-	for _, l := range ls {
-		if l == level {
-			return true
-		}
-	}
-	return false
-}
+func (ls Levels) Contains(level Level) bool { _ = "STUB: not implemented"; return false }
 
 // These are the different logging levels. You can set the logging level to log handler
 const (
@@ -109,19 +89,18 @@ type StringMap = map[string]string
 type M map[string]any
 
 // String map to string
-func (m M) String() string {
-	return mapToString(m)
-}
+func (m M) String() string { _ = "STUB: not implemented"; return "" }
 
 // ClockFn func
 type ClockFn func() time.Time
 
 // Now implements the Clocker
 func (fn ClockFn) Now() time.Time {
-	return fn()
-}
+	_ = "STUB: not implemented"
 
-// region CallerFlagMode
+	// region CallerFlagMode
+	return *new(time.Time)
+}
 
 // CallerFlagMode Defines the Caller backtrace information mode.
 type CallerFlagMode = uint8
@@ -255,53 +234,25 @@ var (
 // region Global functions
 
 // LevelName match
-func LevelName(l Level) string {
-	if n, ok := LevelNames[l]; ok {
-		return n
-	}
-	return "UNKNOWN"
-}
+func LevelName(l Level) string { _ = "STUB: not implemented"; return "" }
 
 // LevelByName convert name to level, fallback to InfoLevel if not match
-func LevelByName(ln string) Level {
-	l, err := StringToLevel(ln)
-	if err != nil {
-		return InfoLevel
-	}
-	return l
-}
+func LevelByName(ln string) Level { _ = "STUB: not implemented"; return *new(Level) }
 
 // Name2Level convert name to level
-func Name2Level(s string) (Level, error) { return StringToLevel(s) }
+func Name2Level(s string) (Level, error) {
+	_ = "STUB: not implemented"
+	return *
 
-// StringToLevel parse and convert string value to Level
-func StringToLevel(s string) (Level, error) {
-	switch strings.ToLower(s) {
-	case "panic":
-		return PanicLevel, nil
-	case "fatal":
-		return FatalLevel, nil
-	case "err", "error":
-		return ErrorLevel, nil
-	case "warn", "warning":
-		return WarnLevel, nil
-	case "note", "notice":
-		return NoticeLevel, nil
-	case "info", "": // make the zero value useful
-		return InfoLevel, nil
-	case "debug":
-		return DebugLevel, nil
-	case "trace":
-		return TraceLevel, nil
-	}
-
-	// is int value, try to parse as int
-	if strutil.IsInt(s) {
-		iVal := strutil.SafeInt(s)
-		return Level(iVal), nil
-	}
-	return 0, errors.New("slog: invalid log level name: " + s)
+	// StringToLevel parse and convert string value to Level
+	new(Level), nil
 }
+
+func StringToLevel(s string) (Level, error) { _ = "STUB: not implemented"; return *new(Level), nil }
+
+// make the zero value useful
+
+// is int value, try to parse as int
 
 //
 // exit handle logic
@@ -310,38 +261,16 @@ func StringToLevel(s string) (Level, error) {
 // global exit handler
 var exitHandlers = make([]func(), 0)
 
-func runExitHandlers() {
-	defer func() {
-		if err := recover(); err != nil {
-			printStderr("slog: run exit handler(global) recovered, error:", err)
-		}
-	}()
-
-	for _, handler := range exitHandlers {
-		handler()
-	}
-}
+func runExitHandlers() { _ = "STUB: not implemented"; return }
 
 // ExitHandlers get all global exitHandlers
-func ExitHandlers() []func() {
-	return exitHandlers
-}
+func ExitHandlers() []func() { _ = "STUB: not implemented"; return nil }
 
 // RegisterExitHandler register an exit-handler on global exitHandlers
-func RegisterExitHandler(handler func()) {
-	exitHandlers = append(exitHandlers, handler)
-}
+func RegisterExitHandler(handler func()) { _ = "STUB: not implemented"; return }
 
 // PrependExitHandler prepend register an exit-handler on global exitHandlers
-func PrependExitHandler(handler func()) {
-	exitHandlers = append([]func(){handler}, exitHandlers...)
-}
+func PrependExitHandler(handler func()) { _ = "STUB: not implemented"; return }
 
 // ResetExitHandlers reset all exitHandlers
-func ResetExitHandlers(applyToStd bool) {
-	exitHandlers = make([]func(), 0)
-
-	if applyToStd {
-		std.ResetExitHandlers()
-	}
-}
+func ResetExitHandlers(applyToStd bool) { _ = "STUB: not implemented"; return }
